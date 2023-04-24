@@ -1,12 +1,15 @@
 ﻿namespace Test
 {
-    using MessageGetterLibrary;
+    using MessageGetter;
 
     internal class Program
     {
         static void Main(string[] args)
         {
-            
+            Configuration option = new Configuration
+            {
+                
+            };
         }
     }
 }

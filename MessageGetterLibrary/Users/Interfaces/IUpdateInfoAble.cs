@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageGetterLibrary
+namespace MessageGetter.Users.Interfaces
 {
-    internal class test
+    internal interface IUpdateInfoAble
     {
+        void UpdateInfo();
     }
 }
