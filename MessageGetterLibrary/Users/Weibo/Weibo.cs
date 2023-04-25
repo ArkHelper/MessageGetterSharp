@@ -8,7 +8,7 @@ using MessageGetter.Users.Interfaces;
 
 namespace MessageGetter.Users
 {
-    public class Weibo : User, IMessageUpdateAble, IUpdateInfoAble
+    public class Weibo : User
     {
         private string _uid;
         public string UID
@@ -25,7 +25,8 @@ namespace MessageGetter.Users
 
         public void UpdateInfo()
         {
-            webAPI.Weibo.UserProfile(this);
+            WebAPI.Weibo.UserProfile(this);
+            ProfileInited = true;
         }
 
         public void UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration)

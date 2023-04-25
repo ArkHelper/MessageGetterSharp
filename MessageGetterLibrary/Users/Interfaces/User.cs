@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessageGetter.Users.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace MessageGetter.Users
 {
-    public class User
+    public class User : IUpdateInfoAble, IMessageUpdateAble
     {
         /// <summary>
-        /// MessageGetter用于唯一识别的ID，由平台号+平台ID组成
-        /// <example>
-        /// <br></br>
-        /// 明日方舟 在 微博 的ID为6279793937，那么其ID为 weibo6279793937
-        /// </example>
+        /// MessageGetter用于唯一识别的ID，由子类实现
         /// </summary>
-        public string ID { get; set; }
+        public string ID { get; protected set; }
 
         /// <summary>
         /// 用户名
@@ -38,11 +35,11 @@ namespace MessageGetter.Users
         /// 消息更新状态，用于指示消息已经更新的次数
         /// </summary>
         public double MessageUpdateStatus { get; set; }
-/*
+
         /// <summary>
-        /// 用户资料更新状态
+        /// 用户资料加载状态
         /// </summary>
-        public int ProfileInitStatus { get; set; }*/
+        public bool ProfileInited { get; set; }
 
         public User()
         {
@@ -52,7 +49,17 @@ namespace MessageGetter.Users
             Avatar = string.Empty;
             Tag = null;
             MessageUpdateStatus = 0;
-            /*ProfileInitStatus = 0;*/
+            ProfileInited = false;
+        }
+
+        public void UpdateInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageGetter.webAPI
+namespace MessageGetter.WebAPI
 {
     internal class Net
     {

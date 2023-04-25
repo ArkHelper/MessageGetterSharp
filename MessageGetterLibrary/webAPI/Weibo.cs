@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using RestSharp;
-using static MessageGetter.webAPI.Net;
+using static MessageGetter.WebAPI.Net;
 
-namespace MessageGetter.webAPI
+namespace MessageGetter.WebAPI
 {
     public static class Weibo
     {
-        private readonly static string mHOST = "https://m.weibo.cn/";
-        private readonly static string HOST = "https://weibo.com/";
+        private readonly static string mHOST = "https://m.weibo.cn";
+        private readonly static string HOST = "https://weibo.com";
         
         public static void UserProfile(Users.Weibo user)
         {
-            string URL = mHOST + "api/container/getIndex?type=uid&value=" + user.UID;
+            string URL = mHOST + "/api/container/getIndex?type=uid&value=" + user.UID;
 
             JsonElement _userinfo;
 
@@ -42,5 +42,7 @@ namespace MessageGetter.webAPI
             }
             throw new Exception();
         }
+
+        
     }
 }
