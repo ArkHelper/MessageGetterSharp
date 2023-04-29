@@ -1,66 +1,66 @@
-﻿using MessageGetter.Users.Interfaces;
+﻿using MessageGetter.Users;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MessageGetter
 {
-    public class Getter<dictValueKind>
+    public static class Getter
     {
         /// <summary>
         /// 消息刷新事件
         /// </summary>
-        public static event EventHandler MessageFreshed;
+        public static event EventHandler? MessageFreshed;
         /// <summary>
         /// 新消息入库
         /// </summary>
-        public static event EventHandler<Message> NewMessageHaveAdded;
+        public static event EventHandler<Message>? NewMessageHaveAdded;
 
-        private Dictionary<Message, dictValueKind> Container;
-        private Thread? Interval;
+        private static List<Message>? Container;
+        private static Thread? Interval;
 
-        public List<Users.User> Users { get; set; }
-        public Configuration Configuration { get; set; }
+        public static List<User> Users { get; set; } = new List<User>();
+        public static Configuration Configuration { get; set; }
 
-        public Getter(Configuration configuration)
+        static Getter()
         {
-            Configuration = configuration;
+            Configuration = new Configuration();
+            Configuration.PropertyChanged += Configuration_PropertyChanged;
         }
 
-        public void SetContainer(Dictionary<Message,dictValueKind> containerAsDict)
-        {
-            Container = containerAsDict;
+        private static void Configuration_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {                
         }
 
-        public void StartInterval()
+        public static void StartInterval()
         {
-            if (Container == null)
-            {
-                throw new InvalidOperationException("消息装载容器未指定。");
-            }
             BuildInterval();
             Interval.Start();
         }
 
-        public void StopInterval()
+        public static void StopInterval()
         {
             Interval?.Abort();
             Interval = null;
         }
 
-        public async void ForceFresh(Action<bool> callback)
+        public static async void ForceFresh(Action<bool>? callback = null)
         {
-            await Task.Run(() =>
+            Task task = new Task(() =>
             {
                 Fresh();
             });
-            callback(true);
+            task.Start();
+            await task;
+            callback?.Invoke(true);
         }
 
-        private void BuildInterval()
+        private static void BuildInterval()
         {
             Interval = new Thread(() =>
             {
@@ -72,11 +72,12 @@ namespace MessageGetter
             });
         }
 
-        private void Fresh()
+        private static void Fresh()
         {
-            MessageFreshed?.Invoke(this,null);
-            //TODO:
+            //start
+            Thread.Sleep(5000);
+            //end
+            MessageFreshed?.Invoke("MessageGetterSharp", new EventArgs());
         }
-
     }
 }

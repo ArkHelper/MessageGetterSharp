@@ -8,5 +8,6 @@ namespace MessageGetter
 {
     public class Message
     {
+         
     }
 }

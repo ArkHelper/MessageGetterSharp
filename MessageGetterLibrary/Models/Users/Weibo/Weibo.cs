@@ -23,13 +23,13 @@ namespace MessageGetter.Users
             ID = typeof(Weibo).Name + uid;
         }
 
-        public void UpdateInfo()
+        public override async Task UpdateInfo()
         {
             WebAPI.Weibo.UserProfile(this);
             ProfileInited = true;
         }
 
-        public void UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration)
+        public override async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration)
         {
             throw new NotImplementedException();
         }

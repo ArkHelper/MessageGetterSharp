@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MessageGetter.Medias
 {
-    public class Picture : Media
+    internal class Video:Media
     {
-        public Picture(string link) : base() { }
+        public Picture? View { get; set; }
+        public Video(string link):base(link) { }
     }
 }

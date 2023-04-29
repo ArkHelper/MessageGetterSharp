@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MessageGetter.Users
 {
-    public class User : IUpdateInfoAble, IMessageUpdateAble
+    public class User
     {
         /// <summary>
         /// MessageGetter用于唯一识别的ID，由子类实现
@@ -52,12 +52,12 @@ namespace MessageGetter.Users
             ProfileInited = false;
         }
 
-        public void UpdateInfo()
+        public virtual async Task UpdateInfo()
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
+        public virtual async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
         {
             throw new NotImplementedException();
         }
