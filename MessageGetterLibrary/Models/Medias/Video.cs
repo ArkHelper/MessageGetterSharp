@@ -9,6 +9,6 @@ namespace MessageGetter.Medias
     internal class Video:Media
     {
         public Picture? View { get; set; }
-        public Video(string link):base(link) { }
+        public Video(string id):base(id) { }
     }
 }
