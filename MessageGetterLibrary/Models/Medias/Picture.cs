@@ -15,7 +15,7 @@ namespace MessageGetter.Medias
         }
 
         public event EventHandler<AsyncCompletedEventArgs>? CreateViewCompleted;
-        public async void CreateView()
+        public async Task CreateView()
         {
             // TODO:createViewImpl(local)
         }
