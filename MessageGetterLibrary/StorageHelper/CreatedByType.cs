@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageGetter.Users.Interfaces
+namespace MessageGetter
 {
-    internal interface IUpdateInfoAble
+    public enum CreatedByType
     {
-        void UpdateInfo();
+        user,
+        repost
     }
 }

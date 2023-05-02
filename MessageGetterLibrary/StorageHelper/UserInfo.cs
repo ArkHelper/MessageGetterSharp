@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MessageGetter
 {
-    public class Message
+    public class UserInfo
     {
-         
+        public CreatedByType UserCreatedBy;
+        public UserInfo() { }
     }
 }

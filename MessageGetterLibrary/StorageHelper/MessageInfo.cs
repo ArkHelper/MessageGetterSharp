@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace MessageGetter
 {
-    public class MessageUpdateConfiguration
+    public class MessageInfo
     {
+        public MessageInfo() { }
+        
+        public CreatedByType MessageCreatedBy { get; set; }
+
     }
 }

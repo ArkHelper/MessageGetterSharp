@@ -1,11 +1,11 @@
-﻿using MessageGetter.Users.Interfaces;
+﻿using MessageGetter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageGetter.Users
+namespace MessageGetter
 {
     public class User
     {
@@ -52,12 +52,12 @@ namespace MessageGetter.Users
             ProfileInited = false;
         }
 
-        public virtual async Task UpdateInfo()
+        internal virtual async Task UpdateInfo()
         {
             throw new NotImplementedException();
         }
 
-        public virtual async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
+        internal virtual async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
         {
             throw new NotImplementedException();
         }

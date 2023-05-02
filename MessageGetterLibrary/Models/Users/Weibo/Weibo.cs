@@ -4,9 +4,8 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MessageGetter.Users.Interfaces;
 
-namespace MessageGetter.Users
+namespace MessageGetter
 {
     public class Weibo : User
     {
@@ -20,18 +19,45 @@ namespace MessageGetter.Users
         public Weibo(string uid)
         {
             _uid = uid;
-            ID = typeof(Weibo).Name + uid;
+            ID = "weibo" + uid;
         }
 
-        public override async Task UpdateInfo()
+        internal override async Task UpdateInfo()
         {
             WebAPI.Weibo.UserProfile(this);
             ProfileInited = true;
         }
 
-        public override async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration)
+        internal override async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration)
         {
-            throw new NotImplementedException();
+            var weibos = WebAPI.Weibo.Page(UID, 1);
+            foreach (var weibo in weibos.EnumerateArray())
+            {
+                bool _top = false;
+                if (weibo.GetProperty("profile_type_id").GetString().Contains("top")) { _top = true; }
+                var json = weibo.GetProperty("mblog");
+
+                var message = new WeiboMessage(json)
+                {
+                    IsTop = _top,
+                    User = this
+                };
+                message.Init();
+
+                if (message.Repost != null)
+                {
+                    message.Repost.Init();
+
+                    
+
+                }
+                // TODO: user
+
+                if (!Getter.Container.Contains(message))
+                {
+                    Getter.Container.Add(message);
+                }
+            }
         }
     }
 }
