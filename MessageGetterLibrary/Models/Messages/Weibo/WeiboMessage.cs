@@ -25,9 +25,6 @@ namespace MessageGetter
 
         public override void Init()
         {
-            //ID
-            ID = "weibo" + JSON.GetProperty("id").GetString();
-
             //微博的longtext解析
             if (JSON.GetProperty("isLongText").GetBoolean()//||true
                 )
@@ -36,20 +33,17 @@ namespace MessageGetter
             }
 
             //User
-            // TODO:拿到Fresh里
             if (User == null)
             {
-                var userID = JSON.GetProperty("user").GetProperty("id").GetDouble();
-                var _user = InitedUsersList.Find(
-                    t => t.Source == MessageSourceType.weibo
-                    && t.Info.ToString() == userID.ToString());
-                if (_user == null)
+                var userID = JSON.GetProperty("user").GetProperty("id").GetDouble().ToString();
+                try
                 {
-                    _user = new User(source, userID.ToString());
-                    _user.InitData();
-                    InitedUsersList.Add(_user);
+                    User = Getter.Users.First(t => t.Key.ID == "weibo" + userID).Key;
                 }
-                User = _user;
+                catch
+                {
+                    User = new Weibo(userID);
+                }
             }
 
             //解析时间
@@ -74,12 +68,13 @@ namespace MessageGetter
             {
                 var repostID = _ret.GetProperty("id").GetString();
 
-                WeiboMessage _msg = null;
-
-                var _rep = Getter.Container.Find(t => t.ID == "weibo" + repostID);
-                if (_rep != null)
+                try
                 {
-                    _msg = new WeiboMessage(_ret);
+                    Repost = Getter.Container.First(t => t.Key.ID == "weibo" + repostID).Key;
+                }
+                catch
+                {
+                    Repost = new WeiboMessage(_ret);
                 }
             }
 
@@ -106,7 +101,7 @@ namespace MessageGetter
                         _wid = wij.GetInt32();
                     }*/
                     string url = _large.GetProperty("url").GetString();
-                    string id = _large.GetProperty("pid").GetString();
+                    string id = item.GetProperty("pid").GetString();
                     Medias.Add(new Picture(id) { Link = url});
                 }
             }

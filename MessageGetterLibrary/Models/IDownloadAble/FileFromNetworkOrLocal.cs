@@ -14,7 +14,18 @@ namespace MessageGetter
     {
         public string? Link { get; set; }
 
-        protected string? ExpectedLocal;
+        protected string? _expectedLocal;
+        protected string? ExpectedLocal
+        {
+            get
+            {
+                return _expectedLocal;
+            }
+            set
+            {
+                _expectedLocal= value;
+            }
+        }
         public string? Local { get; set; } = null;
 
 #pragma warning disable IDE0060 // 删除未使用的参数
@@ -24,7 +35,7 @@ namespace MessageGetter
         /// </summary>
         /// <param name="link">云端链接</param>
         /// <param name="Constructor_num">为了区分多态构造函数的占位形参，需要随意填写一个<see cref="int">double</see>类型量</param>
-        public FileFromNetworkOrLocal(string link,int Constructor_num = 0)
+        public FileFromNetworkOrLocal(string link, int Constructor_num = 0)
         {
             Link = link;
         }
@@ -33,7 +44,7 @@ namespace MessageGetter
         /// </summary>
         /// <param name="local"></param>
         /// <param name="Constructor_num">为了区分多态构造函数的占位形参，需要随意填写一个<see cref="double">double</see>类型量</param>
-        public FileFromNetworkOrLocal(string local,double Constructor_num = 1)
+        public FileFromNetworkOrLocal(string local, double Constructor_num = 1)
         {
             Local = local;
         }
@@ -50,14 +61,14 @@ namespace MessageGetter
         /// <item>使用<see cref="DownloadCompleted">DownloadCompleted</see>事件在下载结束后执行动作</item>
         /// </list>
         /// </remarks>
-        protected async Task Download(string? path,bool evenIfExist = false)
+        protected async Task Download(string? path, bool evenIfExist = false)
         {
             bool end = !evenIfExist && File.Exists(path);
 
             if (end)
             {
-                var e1 = new AsyncCompletedEventArgs(null,false,true);
-                OnDownloadFileCompleted(this,e1);
+                var e1 = new AsyncCompletedEventArgs(null, false, true);
+                OnDownloadFileCompleted(this, e1);
                 return;
             }
 
@@ -67,7 +78,7 @@ namespace MessageGetter
             downloader.DownloadProgressChanged += OnDownloadProgressChanged;
             downloader.DownloadFileCompleted += OnDownloadFileCompleted;
 
-            await downloader.DownloadFileTaskAsync(Link, path);
+            await downloader.DownloadFileTaskAsync(Link, ExpectedLocal);
         }
 
         public event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;

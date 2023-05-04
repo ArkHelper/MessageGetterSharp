@@ -9,7 +9,41 @@
     {
         static void Main(string[] args)
         {
-            double per = 0;
+            Getter.AddUser(new Weibo("6279793937"));
+            Getter.NewMessageAdded += Getter_NewMessageAdded;
+            Getter.MessageFreshed += Getter_MessageFreshed;
+            Getter.StartInterval();
+        }
+
+        private static void Getter_MessageFreshed(object? sender, EventArgs e)
+        {
+            Console.WriteLine(Getter.Container.ToString());
+
+        }
+
+        private static void Getter_NewMessageAdded(Message message, MessageInfo messageInfo)
+        {
+            Console.WriteLine((message as WeiboMessage).RawText.ToString() + "—— add");
+            message.Medias.ForEach(t =>
+            {
+                if (t.GetType() == typeof(Video))
+                {
+                    Console.WriteLine("视频，跳过");
+                }
+                if (t.GetType() == typeof(Picture))
+                {
+                    Console.WriteLine("图片"+t.ID+"，开始下载"); t.Download();
+                    t.Download();
+
+                }
+
+
+            });
+        }
+
+        void a_1()
+        {
+            /*double per = 0;
             Getter.Configuration.RootDir = "C:\\Users\\EvATive7\\ETi7FileRepo\\develop\\MessageGetterSharp\\Test\\bin\\Debug\\net6.0";
 
             Picture picture = new Picture("5556678");
@@ -27,7 +61,7 @@
             {
                 Thread.Sleep(20);
                 Console.WriteLine("waiting:" + per);
-            }
+            }*/
         }
     }
 }

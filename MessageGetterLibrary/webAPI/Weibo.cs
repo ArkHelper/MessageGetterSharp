@@ -61,7 +61,7 @@ namespace MessageGetter.WebAPI
                     using (var client = new RestClient(URL))
                     {
                         _getresult = JsonSerializer.Deserialize<JsonElement>(client.Get(GetRequest).Content);
-                        if (_getresult.GetProperty("ok").GetInt16() != 0) throw new Exception();
+                        if (_getresult.GetProperty("ok").GetInt16() != 1) throw new Exception();
                         var weibos = _getresult.GetProperty("data").GetProperty("cards");
                         return weibos;
                     }

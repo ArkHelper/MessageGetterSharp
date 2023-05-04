@@ -14,7 +14,7 @@ namespace MessageGetter
         public string ID { get; set; } //消息唯一识别号，由来源和ID构成
         public DateTime CreateAt { get; set; } //发布时间
         public bool IsTop { get; set; } = false; //是否是该用户的置顶
-        public WeiboMessage? Repost { get; set; } //转发自
+        public Message? Repost { get; set; } //转发自
         public string Text { get; set; } //消息正文
         public List<Media> Medias { get; set; } = new List<Media>(); //包含的媒体
         public object Tag { get; set; }

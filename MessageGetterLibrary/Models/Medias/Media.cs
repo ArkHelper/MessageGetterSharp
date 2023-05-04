@@ -10,9 +10,20 @@ using System.Threading.Tasks;
 
 namespace MessageGetter.Medias
 {
-    public class Media:FileFromNetworkOrLocal
+    public class Media : FileFromNetworkOrLocal
     {
-        public string? ID { get; set; }
+        private string _id;
+        public string? ID
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
 
         public object? Tag { get; set; }
 
@@ -20,7 +31,9 @@ namespace MessageGetter.Medias
         {
             ID = id;
 
-            ExpectedLocal = Path.Combine(DirHelper.Media, ID);
+            var idForLocal = DirHelper.PraseStringToFileName(ID);
+
+            ExpectedLocal = Path.Combine(DirHelper.Media, idForLocal);
             if (File.Exists(ExpectedLocal))
             {
                 Local = ExpectedLocal;

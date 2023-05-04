@@ -9,6 +9,7 @@ namespace MessageGetter
     public enum CreatedByType
     {
         user,
-        repost
+        repost,
+        fresh
     }
 }

@@ -18,15 +18,15 @@ namespace MessageGetter
         /// </summary>
         public static event EventHandler? MessageFreshed;
 
-        public delegate void NewMessageAddedHandler(Message message,MessageInfo messageInfo);
+        public delegate void NewMessageAddedHandler(Message message, MessageInfo messageInfo);
 
         /// <summary>
         /// 新消息入库
         /// </summary>
         public static event NewMessageAddedHandler NewMessageAdded;
 
-        public static Dictionary<Message, MessageInfo> Container;
-        internal static Dictionary<User, UserInfo> Users;
+        public static Dictionary<Message, MessageInfo> Container = new();
+        internal static Dictionary<User, UserInfo> Users = new();
 
         public static Configuration Configuration { get; set; }
         private static Thread? Interval;
@@ -38,13 +38,21 @@ namespace MessageGetter
 
         internal static void AddNewMessage(Message message, MessageInfo messageInfo)
         {
-            Container.Add(message, messageInfo);
-            NewMessageAdded?.Invoke(message, messageInfo);
+            try
+            {
+                Container.First(t => t.Key == message);
+            }
+            catch
+            {
+                Container.Add(message, messageInfo);
+                NewMessageAdded?.Invoke(message, messageInfo);
+            }
+
         }
 
         public static void AddUser(User user)
         {
-            Users.Add(user,new UserInfo() { UserCreatedBy = CreatedByType.user});
+            Users.Add(user, new UserInfo() { UserCreatedBy = CreatedByType.user });
         }
         public static void RemoveUser(string id)
         {
@@ -58,7 +66,7 @@ namespace MessageGetter
             {
                 throw new NullReferenceException();
             }
-            
+
         }
 
         private static void Configuration_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -100,11 +108,15 @@ namespace MessageGetter
             });
         }
 
-        private static void Fresh()
+        private static async void Fresh()
         {
-            //start
-            Thread.Sleep(5000);
-            //end
+            foreach (var user in Users)
+            {
+                if (user.Value.UserCreatedBy == CreatedByType.user)
+                {
+                    await user.Key.UpdateMessage();
+                }
+            }
             MessageFreshed?.Invoke("MessageGetterSharp", new EventArgs());
         }
     }

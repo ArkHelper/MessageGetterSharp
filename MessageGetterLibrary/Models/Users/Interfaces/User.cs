@@ -52,14 +52,14 @@ namespace MessageGetter
             ProfileInited = false;
         }
 
-        internal virtual async Task UpdateInfo()
+        internal virtual async Task InitProfile()
         {
             throw new NotImplementedException();
         }
 
         internal virtual async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
         {
-            throw new NotImplementedException();
+            if(!ProfileInited) InitProfile();
         }
     }
 }
