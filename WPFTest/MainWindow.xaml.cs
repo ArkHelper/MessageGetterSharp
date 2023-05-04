@@ -2,6 +2,7 @@
 using MessageGetter.Medias;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,15 @@ namespace WPFTest
         public MainWindow()
         {
             InitializeComponent();
+
+            Getter.Configuration = new Configuration()
+            {
+                AutoDownloadVideo = false,
+                AutoDownloadPicture = true,
+                Interval = 60000,
+                RootDir = Directory.GetCurrentDirectory() + @"\message"
+                
+            };
 
             Getter.AddUser(new Weibo("6279793937"));
             Getter.NewMessageAdded += Getter_NewMessageAdded;

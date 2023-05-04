@@ -57,8 +57,8 @@ namespace MessageGetter
         /// <param name="evenIfExist">为<see cref="bool">true</see>时，将会覆盖本地已经存在的文件</param>
         /// <remarks>
         /// <list type="bullet">
-        /// <item>使用<see cref="DownloadProgressChanged">DownloadProgressChanged</see>事件在下载进度改变时执行动作</item>
-        /// <item>使用<see cref="DownloadCompleted">DownloadCompleted</see>事件在下载结束后执行动作</item>
+        /// <item>订阅<see cref="DownloadProgressChanged">DownloadProgressChanged</see>事件在下载进度改变时执行动作</item>
+        /// <item>订阅<see cref="DownloadCompleted">DownloadCompleted</see>事件在下载结束后执行动作</item>
         /// </list>
         /// </remarks>
         protected async Task Download(string? path, bool evenIfExist = false)
