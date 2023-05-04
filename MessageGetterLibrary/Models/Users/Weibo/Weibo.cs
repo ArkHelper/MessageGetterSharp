@@ -64,11 +64,19 @@ namespace MessageGetter
                         {
                             await message.Repost.User.InitProfile();
                         }
+                        try
+                        {
+                            Getter.Users.First(t => t.Key == message.Repost.User);
+                        }
+                        catch
+                        {
+                            Getter.Users.Add(message.Repost.User, new UserInfo() { UserCreatedBy = CreatedByType.repost });
+                        }
                     }
                     Getter.AddNewMessage(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
                 }
 
-                
+
             }
         }
     }
