@@ -11,14 +11,16 @@ namespace MessageGetter
     public class Configuration
     {
         private string _rootDir;
-        private bool _downloadMediaWhenGetMessages;
+        private bool _autoDownloadPicture;
+        private bool _autoDownloadVideo;
         private int _interval;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public Configuration()
         {
             _rootDir = string.Empty;
-            _downloadMediaWhenGetMessages = false;
+            _autoDownloadPicture = true;
+            _autoDownloadVideo = false;
             _interval = 60000;
         }
 
@@ -44,14 +46,23 @@ namespace MessageGetter
             get { return _interval; }
             set { _interval = value; OnPropertyChanged(); }
         }
+        
+        /// <summary>
+        /// 获取消息后立即开始下载其中的视频，默认为<see cref="bool">False</see>
+        /// </summary>
+        public bool AutoDownloadVideo
+        {
+            get { return _autoDownloadVideo; }
+            set { _autoDownloadVideo = value; OnPropertyChanged(); }
+        }
 
         /// <summary>
         /// 获取消息后立即开始下载其中的图片，默认为<see cref="bool">True</see>
         /// </summary>
-        public bool DownloadMediaWhenGetMessages
+        public bool AutoDownloadPicture
         {
-            get { return _downloadMediaWhenGetMessages; }
-            set { _downloadMediaWhenGetMessages = value; OnPropertyChanged(); }
+            get { return _autoDownloadPicture; }
+            set { _autoDownloadPicture = value; OnPropertyChanged(); }
         }
     }
 }

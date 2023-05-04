@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MessageGetter.Medias;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
@@ -55,10 +57,12 @@ namespace MessageGetter
                         ID = id
                     };
                     message.Init();
+                    initMedia(message.Medias);
 
                     if (message.Repost != null)
                     {
                         message.Repost.Init();
+                        initMedia(message.Repost.Medias);
                         Getter.AddNewMessage(message.Repost, new MessageInfo() { MessageCreatedBy = CreatedByType.repost });
                         if (message.Repost.User.ProfileInited)
                         {
@@ -73,11 +77,23 @@ namespace MessageGetter
                             Getter.Users.Add(message.Repost.User, new UserInfo() { UserCreatedBy = CreatedByType.repost });
                         }
                     }
-                    Getter.AddNewMessage(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
+
+                    void initMedia(List<Media> medias)
+                    {
+                        foreach (Media media in medias)
+                        {
+                            if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
+                                media.Download();
+                            if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
+                                media.Download();
+                        }
                 }
 
-
+                Getter.AddNewMessage(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
             }
+
+
         }
     }
+}
 }
