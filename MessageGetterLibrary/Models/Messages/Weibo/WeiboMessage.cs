@@ -14,8 +14,14 @@ namespace MessageGetter
 {
     public class WeiboMessage : Message
     {
+        /// <summary>
+        /// 微博原始文本（HTML）
+        /// </summary>
         public string RawText { get; set; }
 
+        /// <summary>
+        /// 微博原始JSON
+        /// </summary>
         private JsonElement JSON;
 
         public WeiboMessage(JsonElement json)

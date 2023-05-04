@@ -27,6 +27,9 @@ namespace MessageGetter
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        /// <summary>
+        /// 库工作的根目录
+        /// </summary>
         public string RootDir
         {
             get { return _rootDir; }
@@ -34,7 +37,7 @@ namespace MessageGetter
         }
 
         /// <summary>
-        /// 重复更新器频率，单位毫秒
+        /// 重复更新器频率，单位毫秒，默认为<see cref="int">60000</see>
         /// </summary>
         public int Interval
         {
@@ -42,6 +45,9 @@ namespace MessageGetter
             set { _interval = value; OnPropertyChanged(); }
         }
 
+        /// <summary>
+        /// 获取消息后立即开始下载其中的图片，默认为<see cref="bool">True</see>
+        /// </summary>
         public bool DownloadMediaWhenGetMessages
         {
             get { return _downloadMediaWhenGetMessages; }
