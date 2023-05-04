@@ -31,7 +31,7 @@ namespace MessageGetter
 
         internal override async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration)
         {
-            base.UpdateMessage(messageUpdateConfiguration);
+            await base.UpdateMessage(messageUpdateConfiguration);
             var weibos = WebAPI.Weibo.Page(UID, 1);
             foreach (var weibo in weibos.EnumerateArray())
             {
@@ -44,6 +44,7 @@ namespace MessageGetter
                 try
                 {
                     message = (WeiboMessage)Getter.Container.First(t => t.Key.ID == id).Key;
+                    Getter.Container[message].MessageCreatedBy = CreatedByType.fresh;
                 }
                 catch
                 {
@@ -54,18 +55,20 @@ namespace MessageGetter
                         ID = id
                     };
                     message.Init();
+
+                    if (message.Repost != null)
+                    {
+                        message.Repost.Init();
+                        Getter.AddNewMessage(message.Repost, new MessageInfo() { MessageCreatedBy = CreatedByType.repost });
+                        if (message.Repost.User.ProfileInited)
+                        {
+                            await message.Repost.User.InitProfile();
+                        }
+                    }
+                    Getter.AddNewMessage(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
                 }
 
-                if (message.Repost != null)
-                {
-                    message.Repost.Init();
-                    Getter.AddNewMessage(message.Repost, new MessageInfo() { MessageCreatedBy = CreatedByType.repost });
-                    if (message.Repost.User.ProfileInited)
-                    {
-                        await message.Repost.User.InitProfile();
-                    }
-                }
-                Getter.AddNewMessage(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
+                
             }
         }
     }
