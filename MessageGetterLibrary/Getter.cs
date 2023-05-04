@@ -110,12 +110,10 @@ namespace MessageGetter
 
         private static async void Fresh()
         {
-            foreach (var user in Users)
+            foreach (var user in
+                Getter.Users.Where(x => x.Value.UserCreatedBy == CreatedByType.user).Select(x => x.Key).ToList())
             {
-                if (user.Value.UserCreatedBy == CreatedByType.user)
-                {
-                    await user.Key.UpdateMessage();
-                }
+                await user.UpdateMessage();
             }
             MessageFreshed?.Invoke("MessageGetterSharp", new EventArgs());
         }
