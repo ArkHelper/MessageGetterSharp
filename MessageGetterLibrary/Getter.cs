@@ -49,7 +49,6 @@ namespace MessageGetter
             }
             catch //表中没有该消息：
             {
-                Container.Add(message, messageInfo);//加入表中
                 message.Init();//构建
 
                 initMedia(message.Medias);//下载图片和视频
@@ -82,8 +81,8 @@ namespace MessageGetter
 
                 // TODO:筛选
 
-                Container.Add(message, messageInfo);
-                NewMessageAdded?.Invoke(message, messageInfo);
+                Container.Add(message, messageInfo);//加入表中
+                NewMessageAdded?.Invoke(message, messageInfo);//事件提醒
             }
         }
 

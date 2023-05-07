@@ -76,7 +76,7 @@ namespace WPFTest
                                     run.Text = "下载结束";
                                 });
                             };
-                            m.Download();
+                            //m.Download();
                         }
                         textBlock.Inlines.Add(run);
                     }

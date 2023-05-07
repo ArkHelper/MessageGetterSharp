@@ -8,10 +8,16 @@ namespace MessageGetter
 {
     internal class DirHelper
     {
-        public static string Root => Getter.Configuration.RootDir;
-        public static string Media => Root + @"\file\media";
-        public static string Picture_Small => Media + @"\picture_small";
-        public static string Picture_Video => Media + @"\picture_video";
+        private static string Check(string addr)
+        {
+            Directory.CreateDirectory(addr);
+            return addr;
+        }
+        public static string Root =>
+            Check(Getter.Configuration.RootDir);
+        public static string Media => Check(Root + @"\file\media");
+        public static string Picture_Small => Check(Media + @"\picture_small");
+        public static string Picture_Video => Check(Media + @"\picture_video");
 
         /// <summary>
         /// 处理文件名称

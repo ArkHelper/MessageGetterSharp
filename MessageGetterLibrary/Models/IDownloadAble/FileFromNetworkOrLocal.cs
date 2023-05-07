@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.IO.Enumeration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -81,7 +82,7 @@ namespace MessageGetter
             await downloader.DownloadFileTaskAsync(Link, ExpectedLocal);
         }
 
-        public event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
+        public virtual event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
         public event EventHandler<DownloadProgressChangedEventArgs>? DownloadProgressChanged;
 
         private void OnDownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
