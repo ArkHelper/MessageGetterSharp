@@ -36,7 +36,7 @@ namespace MessageGetter
             Configuration.PropertyChanged += Configuration_PropertyChanged;
         }
 
-        internal static void AddNewMessage(Message message, MessageInfo messageInfo)
+        internal static void NewMessage(Message message, MessageInfo messageInfo)
         {
             try
             {

@@ -134,6 +134,8 @@ namespace MessageGetter
                     }
                 }
             }
+
+            base.Init();
         }
     }
 }

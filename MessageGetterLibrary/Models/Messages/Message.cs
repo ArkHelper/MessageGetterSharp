@@ -16,6 +16,11 @@ namespace MessageGetter
         public bool IsTop { get; set; } = false; //是否是该用户的置顶
         public Message? Repost { get; set; } //转发自
         public string Text { get; set; } //消息正文
+
+        /// <summary>
+        /// 消息是否已经加载
+        /// </summary>
+        public bool Inited { get; set; } = false;
         public List<Media> Medias { get; set; } = new List<Media>(); //包含的媒体
         public object Tag { get; set; }
 
@@ -35,7 +40,7 @@ namespace MessageGetter
 
         public virtual void Init()
         {
-            throw new NotImplementedException();
+            Inited = true;
         }
     }
 }
