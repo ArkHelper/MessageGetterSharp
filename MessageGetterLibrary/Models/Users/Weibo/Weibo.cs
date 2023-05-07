@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,22 +45,14 @@ namespace MessageGetter
                 var id = "weibo" + json.GetProperty("id").GetString();
 
                 WeiboMessage message;
-                try
+                message = new WeiboMessage(json)
                 {
-                    message = (WeiboMessage)Getter.Container.First(t => t.Key.ID == id).Key;
-                }
-                catch
-                {
-                    message = new WeiboMessage(json)
-                    {
-                        IsTop = _top,
-                        User = this,
-                        ID = id
-                    };
-                }
+                    IsTop = _top,
+                    User = this,
+                    ID = id
+                };
 
-                Getter.NewMessage(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
-
+                await Getter.NewMessageFromFresh(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
             }
         }
     }

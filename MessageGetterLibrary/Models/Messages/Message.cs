@@ -40,7 +40,7 @@ namespace MessageGetter
 
         public virtual void Init()
         {
-            Inited = true;
+            if(Inited) { return; }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using MessageGetter.Medias;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,18 +37,54 @@ namespace MessageGetter
             Configuration.PropertyChanged += Configuration_PropertyChanged;
         }
 
-        internal static void NewMessage(Message message, MessageInfo messageInfo)
+        internal static async Task NewMessageFromFresh(Message message, MessageInfo messageInfo)
         {
             try
             {
-                Container.First(t => t.Key == message);
+                /* 查询消息表中是否有该条消息
+                 * 有就改变它的MessageInfo
+                 * （有些repost引用时MessageCreatedBy会初始化为repost，如果这条消息又被列表里的用户刷新那么就要改变来源）
+                 */
+                Container[Container.First(t => t.Key.ID == message.ID).Key] = messageInfo;
             }
-            catch
+            catch //表中没有该消息：
             {
+                Container.Add(message, messageInfo);//加入表中
+                message.Init();//构建
+
+                initMedia(message.Medias);//下载图片和视频
+
+                //处理转发消息
+                var repost = message.Repost;
+                if (repost != null)
+                {
+                    repost.Init();//构建转发消息
+                    initMedia(repost.Medias);
+
+                    //初始化转发消息作者
+                    if (repost.User.ProfileInited)
+                    {
+                        await repost.User.InitProfile();
+                        Users.Add(repost.User, new UserInfo() { UserCreatedBy = CreatedByType.repost });
+                    }
+                }
+
+                void initMedia(List<Media> medias)
+                {
+                    foreach (Media media in medias)
+                    {
+                        if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
+                            media.Download();
+                        if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
+                            media.Download();
+                    }
+                }
+
+                // TODO:筛选
+
                 Container.Add(message, messageInfo);
                 NewMessageAdded?.Invoke(message, messageInfo);
             }
-
         }
 
         public static void AddUser(User user)

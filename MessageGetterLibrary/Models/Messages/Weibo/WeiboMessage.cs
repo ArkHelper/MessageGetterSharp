@@ -31,6 +31,8 @@ namespace MessageGetter
 
         public override void Init()
         {
+            base.Init();
+
             //微博的longtext解析
             if (JSON.GetProperty("isLongText").GetBoolean()//||true
                 )
@@ -135,7 +137,7 @@ namespace MessageGetter
                 }
             }
 
-            base.Init();
+            Inited = true;
         }
     }
 }
