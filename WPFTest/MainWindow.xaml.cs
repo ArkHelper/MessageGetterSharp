@@ -51,6 +51,7 @@ namespace WPFTest
                     TextBlock textBlock = new TextBlock();
                     if (m.GetType() == typeof(Picture))
                     {
+                        m = m as Picture;
                         textBlock.Inlines.Add("图片：" + m.ID + ": ");
 
                         Run run = new Run();
@@ -83,7 +84,8 @@ namespace WPFTest
                     if (m.GetType() == typeof(Video))
                     {
 
-                        textBlock.Inlines.Add("视频：" + m.ID + "：不下载");
+                        textBlock.Inlines.Add("视频：" + m.ID + "：不下载" + "，缩略图：" + m.View.ID);
+
                     }
 
                     listBox.Items.Add(new ListBoxItem() { Content = textBlock });

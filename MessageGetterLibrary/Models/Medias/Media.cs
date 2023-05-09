@@ -44,7 +44,7 @@ namespace MessageGetter.Medias
             }
         }
 
-        public override event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
+        //public override event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
 
         /// <summary>
         /// 下载该图片
@@ -53,11 +53,6 @@ namespace MessageGetter.Medias
         /// <returns></returns>
         public async Task Download(bool evenIfExist = false)
         {
-            base.DownloadCompleted += async (s, e) =>
-            {
-                await CreateView();
-                this.DownloadCompleted?.Invoke(this, e);
-            };
             await base.Download(ExpectedLocal, evenIfExist);
         }
 
