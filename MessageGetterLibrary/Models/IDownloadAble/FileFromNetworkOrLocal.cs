@@ -40,6 +40,7 @@ namespace MessageGetter
         {
             Link = link;
         }
+
         /// <summary>
         /// 从路径构造多态文件，此行为认为文件在本地
         /// </summary>
