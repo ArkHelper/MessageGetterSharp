@@ -14,6 +14,7 @@ namespace MessageGetter
         private bool _autoDownloadPicture;
         private bool _autoDownloadVideo;
         private int _interval;
+        private Func<Message, bool>? _filter;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public Configuration()
@@ -22,6 +23,7 @@ namespace MessageGetter
             _autoDownloadPicture = true;
             _autoDownloadVideo = false;
             _interval = 60000;
+            _filter = null;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
@@ -63,6 +65,12 @@ namespace MessageGetter
         {
             get { return _autoDownloadPicture; }
             set { _autoDownloadPicture = value; OnPropertyChanged(); }
+        }
+
+        public Func<Message, bool>? Filter
+        {
+            get { return _filter; }
+            set { _filter = value; OnPropertyChanged();}
         }
     }
 }

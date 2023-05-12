@@ -79,10 +79,12 @@ namespace MessageGetter
                     }
                 }
 
-                // TODO:筛选
-
-                Container.Add(message, messageInfo);//加入表中
-                NewMessageAdded?.Invoke(message, messageInfo);//事件提醒
+                //筛选
+                if (Configuration.Filter == null || Configuration.Filter(message))
+                {
+                    Container.Add(message, messageInfo);//加入表中
+                    NewMessageAdded?.Invoke(message, messageInfo);//事件提醒
+                }
             }
         }
 
