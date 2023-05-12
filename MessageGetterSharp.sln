@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageGetter", "MessageGetterLibrary\MessageGetter.csproj", "{2F3584CC-6579-45F5-89BC-9AEAF0B491C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFTest", "WPFTest\WPFTest.csproj", "{37BB60D3-DF48-472E-A2F5-52183251E995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFDemo", "WPFTest\WPFDemo.csproj", "{37BB60D3-DF48-472E-A2F5-52183251E995}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
