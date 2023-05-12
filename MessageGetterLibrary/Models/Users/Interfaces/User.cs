@@ -1,6 +1,8 @@
 ﻿using MessageGetter;
+using MessageGetter.Medias;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,46 +11,88 @@ namespace MessageGetter
 {
     public class User
     {
+        private string id;
         /// <summary>
         /// MessageGetter用于唯一识别的ID，由子类实现
         /// </summary>
-        public string ID { get; protected set; }
+        public string ID
+        {
+            get { return id; }
+            protected set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    OnPropertyChanged(nameof(ID));
+                }
+            }
+        }
 
-        /// <summary>
-        /// 用户名
-        /// </summary>
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
 
-        /// <summary>
-        /// 用户昵称
-        /// </summary>
-        public string NickName { get; set; }
+        private string nickname;
+        public string NickName
+        {
+            get { return nickname; }
+            set
+            {
+                if (nickname != value)
+                {
+                    nickname = value;
+                    OnPropertyChanged(nameof(NickName));
+                }
+            }
+        }
 
-        /// <summary>
-        /// 用户头像对应的图片
-        /// </summary>
-        public string Avatar { get; set; }
+        private Picture avatar;
+        public Picture Avatar
+        {
+            get { return avatar; }
+            set
+            {
+                if (avatar != value)
+                {
+                    avatar = value;
+                    OnPropertyChanged(nameof(Avatar));
+                }
+            }
+        }
 
-        public object? Tag { get; set; }
-
-        /// <summary>
-        /// 消息更新状态，用于指示消息已经更新的次数
-        /// </summary>
-        public double MessageUpdateStatus { get; set; }
-
+        private bool profileInited;
         /// <summary>
         /// 用户资料加载状态
         /// </summary>
-        public bool ProfileInited { get; set; }
+        public bool ProfileInited
+        {
+            get { return profileInited; }
+            set
+            {
+                if (profileInited != value)
+                {
+                    profileInited = value;
+                    OnPropertyChanged(nameof(ProfileInited));
+                }
+            }
+        }
 
         public User()
         {
             ID = string.Empty;
             Name = string.Empty;
             NickName = string.Empty;
-            Avatar = string.Empty;
-            Tag = null;
-            MessageUpdateStatus = 0;
+            Avatar = null;
             ProfileInited = false;
         }
 
@@ -60,6 +104,13 @@ namespace MessageGetter
         internal virtual async Task UpdateMessage(MessageUpdateConfiguration? messageUpdateConfiguration = null)
         {
             if(!ProfileInited) InitProfile();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

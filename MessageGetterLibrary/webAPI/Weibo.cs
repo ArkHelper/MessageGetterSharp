@@ -30,7 +30,7 @@ namespace MessageGetter.WebAPI
                     {
                         _userinfo = JsonSerializer.Deserialize<JsonElement>(client.Get(GetRequest).Content).GetProperty("data").GetProperty("userInfo");
                     }
-                    user.Avatar = _userinfo.GetProperty("profile_image_url").GetString();
+                    user.Avatar = new Medias.Picture(_userinfo.GetProperty("profile_image_url").GetString());
                     user.Name = _userinfo.GetProperty("screen_name").GetString();
                     return;
                 }

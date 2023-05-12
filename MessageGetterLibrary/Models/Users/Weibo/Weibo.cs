@@ -13,17 +13,31 @@ namespace MessageGetter
 {
     public class Weibo : User
     {
-        private string _uid;
+        private string uid;
         public string UID
         {
-            get { return _uid; }
-            set { _uid = value; }
+            get { return uid; }
+            set
+            {
+                if (uid != value)
+                {
+                    uid = value;
+                    OnPropertyChanged(nameof(UID));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public Weibo(string uid)
         {
-            _uid = uid;
-            ID = "weibo" + uid;
+            this.uid = uid;
+            ID = "weibo" + this.uid ;
         }
 
         internal override async Task InitProfile()

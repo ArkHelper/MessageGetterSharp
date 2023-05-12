@@ -1,46 +1,156 @@
 ﻿using MessageGetter.Medias;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MessageGetter;
+using System.ComponentModel;
 
-namespace MessageGetter
+public class Message : IComparable<Message>, INotifyPropertyChanged
 {
-    public class Message : IComparable<Message>
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private User user;
+    public User User
     {
-        public User User { get; set; }
-
-        public string ID { get; set; } //消息唯一识别号，由来源和ID构成
-        public DateTime CreateAt { get; set; } //发布时间
-        public bool IsTop { get; set; } = false; //是否是该用户的置顶
-        public Message? Repost { get; set; } //转发自
-        public string Text { get; set; } //消息正文
-
-        /// <summary>
-        /// 消息是否已经加载
-        /// </summary>
-        public bool Inited { get; set; } = false;
-        public List<Media> Medias { get; set; } = new List<Media>(); //包含的媒体
-        public object Tag { get; set; }
-
-        /// <summary>
-        /// 重写的CompareTo方法，时间排序
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public int CompareTo(Message other)
+        get { return user; }
+        set
         {
-            if (null == other)
+            if (user != value)
             {
-                return 1;
+                user = value;
+                OnPropertyChanged(nameof(User));
             }
-            return other.CreateAt.CompareTo(this.CreateAt);//降序
         }
+    }
 
-        public virtual void Init()
+    private string id;
+    public string ID
+    {
+        get { return id; }
+        set
         {
-            if(Inited) { return; }
+            if (id != value)
+            {
+                id = value;
+                OnPropertyChanged(nameof(ID));
+            }
         }
+    }
+
+    private DateTime createAt;
+    public DateTime CreateAt
+    {
+        get { return createAt; }
+        set
+        {
+            if (createAt != value)
+            {
+                createAt = value;
+                OnPropertyChanged(nameof(CreateAt));
+            }
+        }
+    }
+
+    private bool isTop = false;
+    public bool IsTop
+    {
+        get { return isTop; }
+        set
+        {
+            if (isTop != value)
+            {
+                isTop = value;
+                OnPropertyChanged(nameof(IsTop));
+            }
+        }
+    }
+
+    private Message repost;
+    public Message Repost
+    {
+        get { return repost; }
+        set
+        {
+            if (repost != value)
+            {
+                repost = value;
+                OnPropertyChanged(nameof(Repost));
+            }
+        }
+    }
+
+    private string text;
+    public string Text
+    {
+        get { return text; }
+        set
+        {
+            if (text != value)
+            {
+                text = value;
+                OnPropertyChanged(nameof(Text));
+            }
+        }
+    }
+
+    private bool inited = false;
+    public bool Inited
+    {
+        get { return inited; }
+        set
+        {
+            if (inited != value)
+            {
+                inited = value;
+                OnPropertyChanged(nameof(Inited));
+            }
+        }
+    }
+
+    private List<Media> medias = new List<Media>();
+    public List<Media> Medias
+    {
+        get { return medias; }
+        set
+        {
+            if (medias != value)
+            {
+                medias = value;
+                OnPropertyChanged(nameof(Medias));
+            }
+        }
+    }
+
+    private object tag;
+    public object Tag
+    {
+        get { return tag; }
+        set
+        {
+            if (tag != value)
+            {
+                tag = value;
+                OnPropertyChanged(nameof(Tag));
+            }
+        }
+    }
+
+    public int CompareTo(Message other)
+    {
+        if (other == null)
+        {
+            return 1;
+        }
+        return other.CreateAt.CompareTo(this.CreateAt); //降序
+    }
+
+    public virtual void Init()
+    {
+        if (Inited)
+        {
+            return;
+        }
+    }
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

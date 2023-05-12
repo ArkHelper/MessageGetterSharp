@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
@@ -12,21 +13,31 @@ using System.Threading.Tasks;
 
 namespace MessageGetter
 {
-    public class WeiboMessage : Message
+    public class WeiboMessage : Message, INotifyPropertyChanged
     {
         /// <summary>
         /// 微博原始文本（HTML）
         /// </summary>
-        public string RawText { get; set; }
+        private string rawText;
+        public string RawText
+        {
+            get { return rawText; }
+            set
+            {
+                if (rawText != value)
+                {
+                    rawText = value;
+                    OnPropertyChanged(nameof(RawText));
+                }
+            }
+        }
 
-        /// <summary>
-        /// 微博原始JSON
-        /// </summary>
-        private JsonElement JSON;
+        // 原始Json
+        private JsonElement Json;
 
         public WeiboMessage(JsonElement json)
         {
-            JSON = json;
+            Json = json;
         }
 
         public override void Init()
@@ -34,16 +45,16 @@ namespace MessageGetter
             base.Init();
 
             //微博的longtext解析
-            if (JSON.GetProperty("isLongText").GetBoolean()//||true
+            if (Json.GetProperty("isLongText").GetBoolean()//||true
                 )
             {
-                JSON = WebAPI.Weibo.Detail(JSON.GetProperty("id").GetString());
+                Json = WebAPI.Weibo.Detail(Json.GetProperty("id").GetString());
             }
 
             //User
             if (User == null)
             {
-                var userID = JSON.GetProperty("user").GetProperty("id").GetDouble().ToString();
+                var userID = Json.GetProperty("user").GetProperty("id").GetDouble().ToString();
                 try
                 {
                     User = Getter.Users.First(t => t.Key.ID == "weibo" + userID).Key;
@@ -56,10 +67,10 @@ namespace MessageGetter
 
             //解析时间
             CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture("en-US");
-            CreateAt = DateTime.ParseExact(JSON.GetProperty("created_at").GetString(), "ddd MMM d HH:mm:ss zz00 yyyy", cultureInfo);
+            CreateAt = DateTime.ParseExact(Json.GetProperty("created_at").GetString(), "ddd MMM d HH:mm:ss zz00 yyyy", cultureInfo);
 
             //获取文字并从HTML反转义
-            RawText = System.Net.WebUtility.HtmlDecode(JSON.GetProperty("text").GetString());
+            RawText = System.Net.WebUtility.HtmlDecode(Json.GetProperty("text").GetString());
             Text = RawText;
 
             //文字处理（html转段落）//future解决误杀正常文字
@@ -72,7 +83,7 @@ namespace MessageGetter
             }
 
             //转发
-            if (JSON.TryGetProperty("retweeted_status", out var _ret))
+            if (Json.TryGetProperty("retweeted_status", out var _ret))
             {
                 var repostID = _ret.GetProperty("id").GetString();
 
@@ -87,7 +98,7 @@ namespace MessageGetter
             }
 
             //图片/视频获取
-            if (JSON.TryGetProperty("pics", out var _pics))
+            if (Json.TryGetProperty("pics", out var _pics))
             {
                 var pics = _pics.EnumerateArray();
                 foreach (var item in pics)
@@ -110,12 +121,12 @@ namespace MessageGetter
                     }*/
                     string url = _large.GetProperty("url").GetString();
                     string id = item.GetProperty("pid").GetString();
-                    Medias.Add(new Picture(id) { Link = url});
+                    Medias.Add(new Picture(id) { Link = url });
                 }
             }
             else
             {
-                if (JSON.TryGetProperty("page_info", out var pageInfo) && Repost == null)
+                if (Json.TryGetProperty("page_info", out var pageInfo) && Repost == null)
                 {
                     if (pageInfo.TryGetProperty("media_info", out var mediaInfo))
                     {
