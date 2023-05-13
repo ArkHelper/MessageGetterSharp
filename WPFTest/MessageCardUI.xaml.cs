@@ -22,7 +22,7 @@ namespace WPFTest
     public partial class MessageCardUI : UserControl
     {
         public static readonly DependencyProperty BindingPersonProperty =
-        DependencyProperty.Register("BindingPerson", typeof(Message), typeof(UserControl), new PropertyMetadata(null));
+        DependencyProperty.Register("BindingMessage", typeof(Message), typeof(UserControl), new PropertyMetadata(null));
 
         public Message BindingMessage
         {
