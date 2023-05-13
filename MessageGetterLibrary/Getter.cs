@@ -61,7 +61,7 @@ namespace MessageGetter
                     initMedia(repost.Medias);
 
                     //初始化转发消息作者
-                    if (repost.User.ProfileInited)
+                    if (!repost.User.ProfileInited)
                     {
                         await repost.User.InitProfile();
                         Users.Add(repost.User, new UserInfo() { UserCreatedBy = CreatedByType.repost });
