@@ -8,12 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Asset\SourceHanSansCN-Medium.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MessageGetterLibrary\MessageGetter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Asset\SourceHanSansCN-Medium.ttf" />
   </ItemGroup>
 
 </Project>

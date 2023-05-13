@@ -1,5 +1,6 @@
 ﻿using MessageGetter;
 using MessageGetter.Medias;
+using WPFDemo.Control;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace WPFTest
+namespace WPFDemo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -46,11 +47,10 @@ namespace WPFTest
 
         private void Getter_NewMessageAdded(Message message, MessageInfo messageInfo)
         {
-            Application.Current.Dispatcher.Invoke(() => MessageBoxs.Children.Add(new MessageCardUI(message)));
+            Application.Current.Dispatcher.Invoke(() => MessageBoxs.Children.Add(new WPFDemo.Control.MessageCardUI(message)));
             Task.Run(() =>
             {
                 Thread.Sleep(1000);
-                message.Text = "666666";
             });
         }
     }
