@@ -48,10 +48,31 @@ namespace WPFDemo
         private void Getter_NewMessageAdded(Message message, MessageInfo messageInfo)
         {
             Application.Current.Dispatcher.Invoke(() => MessageBoxs.Children.Add(new WPFDemo.Control.MessageCardUI(message)));
+        }
+
+        private void ForceFresh_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxs.Children.Clear();
+            MessageBox.Show("已清除，该对话框关闭的2秒后将重新加载。");
+
             Task.Run(() =>
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (var item in Getter.Container)
+                    {
+                        if (item.Value.Hide || item.Value.MessageCreatedBy == CreatedByType.repost)
+                        {
+                            continue;
+                        }
+                        MessageBoxs.Children.Add(new WPFDemo.Control.MessageCardUI(item.Key));
+                    }
+                });
             });
+
+
         }
     }
 }

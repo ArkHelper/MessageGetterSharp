@@ -12,12 +12,21 @@
     mc:Ignorable="d">
     <Grid>
         <ScrollViewer>
-            <StackPanel Name="MessageBoxs">
-                <StackPanel.Resources>
-                    <Style TargetType="Control:MessageCardUI">
-                        <Setter Property="Margin" Value="10" />
-                    </Style>
-                </StackPanel.Resources>
+            <StackPanel>
+                <WrapPanel Orientation="Vertical">
+                    <Button
+                        Name="ForceFresh"
+                        Click="ForceFresh_Click"
+                        Content="强制重新刷新界面（用于测试内存占用）" />
+                    <!--<TextBlock Margin="5">测试</TextBlock>-->
+                </WrapPanel>
+                <StackPanel Name="MessageBoxs">
+                    <StackPanel.Resources>
+                        <Style TargetType="Control:MessageCardUI">
+                            <Setter Property="Margin" Value="10" />
+                        </Style>
+                    </StackPanel.Resources>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
 

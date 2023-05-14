@@ -1,6 +1,7 @@
 ﻿using MessageGetter;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPFDemo.RuntimeStorageHelper;
 
 namespace WPFDemo.Control
 {
@@ -40,6 +42,30 @@ namespace WPFDemo.Control
                 this.repostMessageDock.Children.Add(new MessageCardUIContent(message.Repost));
             else
                 this.repostMessageDock.Visibility = Visibility.Collapsed;
+
+
+            MakeUserAvatar(message);
+
+        }
+
+        private void MakeUserAvatar(Message message)
+        {
+            var userAvatarBitmapImage = RuntimeStorageHelper.PictureStorage.Get(message.User.Avatar);
+            Image userAvatarImageUI = new Image()
+            {
+                Height = 36,
+                Width = 36,
+                VerticalAlignment = VerticalAlignment.Center,
+                /*Tag = user,*/
+                Source = userAvatarBitmapImage,
+                Clip = new RectangleGeometry()
+                {
+                    RadiusY = 18,
+                    RadiusX = 18,
+                    Rect = new Rect(0, 0, 36, 36)
+                }
+            };
+            UserAvatar.Children.Add(userAvatarImageUI);
         }
 
         public MessageCardUIContent()
