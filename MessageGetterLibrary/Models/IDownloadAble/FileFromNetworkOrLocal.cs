@@ -83,7 +83,7 @@ namespace MessageGetter
             await downloader.DownloadFileTaskAsync(Link, ExpectedLocal);
         }
 
-        public virtual event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
+        public event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
         public event EventHandler<DownloadProgressChangedEventArgs>? DownloadProgressChanged;
 
         private void OnDownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)

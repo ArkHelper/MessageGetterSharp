@@ -39,14 +39,14 @@
                 </TextBlock>
             </WrapPanel>
 
-            <local:HTMLTextBlock
+            <!--<local:HTMLTextBlock
                 Margin="0,10,0,0"
                 d:Text="这是测试内容"
                 FontSize="14.5"
-                HTML="{Binding RawText}" />
+                HTML="{Binding RawText}" />-->
 
             <!--  图片区域  -->
-            <WrapPanel Name="Picture" />
+            <WrapPanel Name="Picture" Margin="0,10,0,0" />
 
             <!--  转发消息  -->
             <DockPanel

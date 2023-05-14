@@ -9,5 +9,5 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <materialDesign:Card Width="500" Padding="10" Name="rootCard" />
+    <materialDesign:Card Name="rootCard" Padding="10,7,10,10" />
 </UserControl>

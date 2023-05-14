@@ -16,15 +16,8 @@ namespace MessageGetter.Medias
 
         public async Task Download()
         {
-            base.DownloadCompleted += async (s, e) =>
-            {
-                await CreateView();
-                this.DownloadCompleted?.Invoke(this, e);
-            };
             await base.Download();
         }
-
-        public override event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
 
         private int ViewSize = 200;
 

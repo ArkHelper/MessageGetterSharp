@@ -12,14 +12,14 @@ namespace MessageGetter.Medias
         public string CoverLink { get; set; }
         public Video(string id):base(id) { }
 
-        public override event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
+        //public override event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
         public async Task Download()
         {
-            base.DownloadCompleted += async (s, e) =>
+            /*base.DownloadCompleted += async (s, e) =>
             {
-                await CreateView();
+                //await CreateView();
                 this.DownloadCompleted?.Invoke(this, e);
-            };
+            };*/
             await base.Download();
         }
 

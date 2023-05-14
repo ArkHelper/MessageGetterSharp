@@ -35,7 +35,7 @@ namespace MessageGetter.Medias
         {
             ID = id;
 
-            var idForLocal = DirHelper.PraseStringToFileName(ID);
+            var idForLocal = DirHelper.PraseStringToFileName(ID + ".jpg");
 
             ExpectedLocal = Path.Combine(DirHelper.Media, idForLocal);
             if (File.Exists(ExpectedLocal))

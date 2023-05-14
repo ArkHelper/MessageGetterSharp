@@ -1,4 +1,5 @@
 ﻿using MessageGetter;
+using MessageGetter.Medias;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -43,29 +44,26 @@ namespace WPFDemo.Control
             else
                 this.repostMessageDock.Visibility = Visibility.Collapsed;
 
-
-            MakeUserAvatar(message);
-
-        }
-
-        private void MakeUserAvatar(Message message)
-        {
-            var userAvatarBitmapImage = RuntimeStorageHelper.PictureStorage.Get(message.User.Avatar);
-            Image userAvatarImageUI = new Image()
+            var UserAvaClip = new RectangleGeometry()
             {
-                Height = 36,
-                Width = 36,
-                VerticalAlignment = VerticalAlignment.Center,
-                /*Tag = user,*/
-                Source = userAvatarBitmapImage,
-                Clip = new RectangleGeometry()
-                {
-                    RadiusY = 18,
-                    RadiusX = 18,
-                    Rect = new Rect(0, 0, 36, 36)
-                }
+                RadiusY = 18,
+                RadiusX = 18,
+                Rect = new Rect(0, 0, 36, 36)
             };
-            UserAvatar.Children.Add(userAvatarImageUI);
+            UserAvatar.Children.Add(
+                new PictureViewer(message.User.Avatar)
+                {
+                    Width = 36,
+                    Height = 36,
+                    Clip = UserAvaClip
+                });
+            if (message.Medias.Exists(t=>t is Picture))
+                Picture.Children.Add(
+                    new PictureViewer((Picture)message.Medias[0])
+                    {
+                        Width = 100,
+                        Height = 100
+                    });
         }
 
         public MessageCardUIContent()
