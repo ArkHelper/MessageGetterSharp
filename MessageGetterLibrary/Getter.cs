@@ -49,34 +49,40 @@ namespace MessageGetter
             }
             catch //表中没有该消息：
             {
-                message.Init();//构建
+                message.Init();//构建消息
 
-                initMedia(message.Medias);//下载图片和视频
+                initMedia(message.User.Avatar);//下载用户头像
+                initMediaList(message.Medias);//下载图片和视频
 
                 //处理转发消息
                 var repost = message.Repost;
                 if (repost != null)
                 {
                     repost.Init();//构建转发消息
-                    initMedia(repost.Medias);
+                    initMediaList(repost.Medias);
 
                     //初始化转发消息作者
                     if (!repost.User.ProfileInited)
                     {
                         await repost.User.InitProfile();
+                        initMedia(repost.User.Avatar);
                         Users.Add(repost.User, new UserInfo() { UserCreatedBy = CreatedByType.repost });
                     }
                 }
 
-                void initMedia(List<Media> medias)
+                void initMediaList(List<Media> medias)
                 {
-                    foreach (Media media in medias)
+                    foreach (Media media in (List<Media>)medias)
                     {
-                        if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
-                            media.Download();
-                        if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
-                            media.Download();
+                        initMedia(media);
                     }
+                }
+                void initMedia(Media media)
+                {
+                    if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
+                        media.Download();
+                    if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
+                        media.Download();
                 }
 
                 //筛选

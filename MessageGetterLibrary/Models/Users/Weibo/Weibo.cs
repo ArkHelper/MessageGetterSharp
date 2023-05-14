@@ -43,6 +43,7 @@ namespace MessageGetter
         internal override async Task InitProfile()
         {
             WebAPI.Weibo.UserProfile(this);
+            //await this.Avatar.Download();
             ProfileInited = true;
         }
 
