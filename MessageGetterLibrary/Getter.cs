@@ -100,6 +100,7 @@ namespace MessageGetter
         }*/
         #endregion
 
+        private static int _pollingFreshTimes = 0;
         private static void MakeThread()
         {
             Thread = new Thread(async () =>
@@ -110,6 +111,8 @@ namespace MessageGetter
                     {
                         await user.UpdateMessage();
                     }
+                    _pollingFreshTimes++;
+                    PollingFreshEnded?.Invoke("MessageGetterSharp",_pollingFreshTimes);
                     Thread.Sleep(Configuration.Interval);
                 }
 
