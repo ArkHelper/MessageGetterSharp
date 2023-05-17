@@ -1,16 +1,5 @@
-﻿using Downloader;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Security.Authentication.ExtendedProtection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MessageGetter.Medias
 {

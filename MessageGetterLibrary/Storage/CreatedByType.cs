@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MessageGetter
+namespace MessageGetter.Storage
 {
-    public class UserInfo
+    public enum CreatedByType
     {
-        public CreatedByType UserCreatedBy;
-        public UserInfo() { }
+        user,
+        repost,
+        fresh
     }
 }

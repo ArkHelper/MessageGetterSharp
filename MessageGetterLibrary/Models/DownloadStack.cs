@@ -9,27 +9,5 @@ namespace MessageGetter
 {
     internal class DownloadStack:Stack<FileFromNetworkOrLocal>
     {
-
-
-
-        public void Start()
-        {
-            
-        }
-
-        public void Stop()
-        {
-
-        }
-
-        public void Pause()
-        {
-
-        }
-
-        public void Resume()
-        {
-
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MessageGetter.Medias;
+using MessageGetter.Storage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

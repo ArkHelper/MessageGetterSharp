@@ -1,4 +1,5 @@
 ﻿using MessageGetter.Medias;
+using MessageGetter.Storage;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
@@ -9,67 +10,142 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using static MessageGetter.Storage.Container;
 
 namespace MessageGetter
 {
     public static class Getter
     {
+        #region API
+
         /// <summary>
-        /// 消息刷新事件
+        /// 新消息入库委托
         /// </summary>
-        public static event EventHandler? MessageFreshed;
-
+        /// <param name="message"></param>
+        /// <param name="messageInfo"></param>
         public delegate void NewMessageAddedHandler(Message message, MessageInfo messageInfo);
-
         /// <summary>
         /// 新消息入库
         /// </summary>
         public static event NewMessageAddedHandler NewMessageAdded;
 
-        public static Dictionary<Message, MessageInfo> Container = new();
-        internal static Dictionary<User, UserInfo> Users = new();
-
-        public static Configuration Configuration { get; set; }
-        private static Thread? Interval;
-        static Getter()
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="user"></param>
+        public static void AddUser(User user)
         {
-            Configuration = new Configuration();
-            Configuration.PropertyChanged += Configuration_PropertyChanged;
+            UsersContainer.Add(user, new UserInfo() { UserCreatedBy = CreatedByType.user });
         }
-
-        internal static async Task NewMessageFromFresh(Message message, MessageInfo messageInfo)
+        /// <summary>
+        /// 移除用户
+        /// </summary>
+        /// <param name="id">用户ID，例如<see cref="string">weibo6279793937</see></param>
+        /// <exception cref="NullReferenceException"></exception>
+        public static void RemoveUser(string id)
         {
+            User user;
             try
             {
-                /* 查询消息表中是否有该条消息
-                 * 有就改变它的MessageInfo
-                 * （有些repost引用时MessageCreatedBy会初始化为repost，如果这条消息又被列表里的用户刷新那么就要改变来源）
-                 */
-                Container[Container.First(t => t.Key.ID == message.ID).Key] = messageInfo;
+                user = UsersContainer.First(t => t.Key.ID == id).Key;
+                UsersContainer.Remove(user);
             }
-            catch //表中没有该消息：
+            catch
             {
-                message.Init();//构建消息
+                throw new NullReferenceException();
+            }
 
-                initMedia(message.User.Avatar);//下载用户头像
-                initMediaList(message.Medias);//下载图片和视频
+        }
 
-                //处理转发消息
-                var repost = message.Repost;
-                if (repost != null)
+        /// <summary>
+        /// 配置文件
+        /// </summary>
+        public static Configuration Configuration { get; set; }
+
+        #endregion
+
+        #region API_控制
+        /// <summary>
+        /// 开始消息获取
+        /// </summary>
+        public static void Start()
+        {
+
+        }
+
+        /// <summary>
+        /// 停止消息获取
+        /// </summary>
+        public static void Stop()
+        {
+
+        }
+
+        /*private static async void ForceFresh()
+        {
+            // TODO:IMPL
+            Task task = new Task(() =>
+            {
+                Fresh();
+            });
+            task.Start();
+            await task;
+            callback?.Invoke(true);
+        }*/
+        #endregion
+
+        static Getter()
+        {
+            Configuration = new Configuration(); // 设定默认配置
+            Configuration.PropertyChanged += Configuration_PropertyChanged; // 配置改变事件
+        }
+
+        /// <summary>
+        /// 配置改变事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void Configuration_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// 消息入库校验&通知
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="messageInfo">消息状态</param>
+        /// <returns></returns>
+        internal static async Task NewMessageFromFresh(Message message, MessageInfo messageInfo)
+        {
+            var operateTargetIfExist = MessageContainer.FirstOrDefault(t => t.Key.ID == message.ID); // 查询消息表中是否有该条消息
+
+            if (operateTargetIfExist.Key != null)
+            {
+                MessageContainer[operateTargetIfExist.Key] = messageInfo; // 有就改变它的MessageInfo（有些repost引用时MessageCreatedBy会初始化为repost，如果这条消息又被列表里的用户刷新那么就要改变来源）
+            }
+            else //表中没有该消息：
+            {
+                initMessage(message);
+
+                void initMessage(Message messageToinit)
                 {
-                    repost.Init();//构建转发消息
-                    initMediaList(repost.Medias);
+                    if (messageToinit == null) return;
 
-                    //初始化转发消息作者
-                    if (!repost.User.ProfileInited)
-                    {
-                        await repost.User.InitProfile();
-                        initMedia(repost.User.Avatar);
-                        Users.Add(repost.User, new UserInfo() { UserCreatedBy = CreatedByType.repost });
-                    }
+                    messageToinit.Init();
+                    initUser(messageToinit.User);
+                    initMessage(messageToinit.Repost);
+                    initMediaList(messageToinit.Medias);
                 }
-
+                async void initUser(User user)
+                {
+                    if (!user.ProfileInited)
+                        await user.InitProfile();
+                    if (!UsersContainer.TryGetValue(user, out var userinfo))
+                    {
+                        UsersContainer.Add(user, new UserInfo { UserCreatedBy = CreatedByType.repost });
+                    }
+                    initMedia(user.Avatar);
+                }
                 void initMediaList(List<Media> medias)
                 {
                     foreach (Media media in (List<Media>)medias)
@@ -88,78 +164,9 @@ namespace MessageGetter
                 //筛选
                 if (Configuration.Filter == null || Configuration.Filter(message))
                 {
-                    Container.Add(message, messageInfo);//加入表中
                     NewMessageAdded?.Invoke(message, messageInfo);//事件提醒
                 }
             }
-        }
-
-        public static void AddUser(User user)
-        {
-            Users.Add(user, new UserInfo() { UserCreatedBy = CreatedByType.user });
-        }
-        public static void RemoveUser(string id)
-        {
-            User user;
-            try
-            {
-                user = Users.First(t => t.Key.ID == id).Key;
-                Users.Remove(user);
-            }
-            catch
-            {
-                throw new NullReferenceException();
-            }
-
-        }
-
-        private static void Configuration_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-        }
-
-        public static void StartInterval()
-        {
-            BuildInterval();
-            Interval.Start();
-        }
-
-        public static void StopInterval()
-        {
-            Interval?.Abort();
-            Interval = null;
-        }
-
-        public static async void ForceFresh(Action<bool>? callback = null)
-        {
-            Task task = new Task(() =>
-            {
-                Fresh();
-            });
-            task.Start();
-            await task;
-            callback?.Invoke(true);
-        }
-
-        private static void BuildInterval()
-        {
-            Interval = new Thread(() =>
-            {
-                while (true)
-                {
-                    Fresh();
-                    Thread.Sleep(Configuration.Interval);
-                }
-            });
-        }
-
-        private static async void Fresh()
-        {
-            foreach (var user in
-                Getter.Users.Where(x => x.Value.UserCreatedBy == CreatedByType.user).Select(x => x.Key).ToList())
-            {
-                await user.UpdateMessage();
-            }
-            MessageFreshed?.Invoke("MessageGetterSharp", new EventArgs());
         }
     }
 }
