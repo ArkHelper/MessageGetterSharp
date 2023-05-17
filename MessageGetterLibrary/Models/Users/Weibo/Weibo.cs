@@ -68,7 +68,7 @@ namespace MessageGetter
                     ID = id
                 };
 
-                await Getter.NewMessageFromFresh(message, new MessageInfo() { MessageCreatedBy = CreatedByType.fresh });
+                await Getter.NewMessage(message, new MessageInfo() { MessageStatus = Status.createdBy_fresh });
             }
         }
     }

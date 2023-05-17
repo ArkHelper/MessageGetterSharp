@@ -8,7 +8,7 @@ namespace MessageGetter.Storage
 {
     public class UserInfo
     {
-        public CreatedByType UserCreatedBy;
+        public Status UserCreatedBy;
         public UserInfo() { }
     }
 }

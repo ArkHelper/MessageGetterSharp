@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace MessageGetter.Storage
 {
-    public enum CreatedByType
+    public enum Status
     {
-        user,
-        repost,
-        fresh
+        createdBy_user,
+        createdBy_repost,
+        createdBy_fresh,
+        createdBy_fresh_hide
     }
 }

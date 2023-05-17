@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Globalization;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -57,7 +58,7 @@ namespace MessageGetter
                 var userID = Json.GetProperty("user").GetProperty("id").GetDouble().ToString();
                 try
                 {
-                    User = Getter.Users.First(t => t.Key.ID == "weibo" + userID).Key;
+                    User = Storage.Container.UsersContainer.First(t => t.Key.ID == "weibo" + userID).Key;
                 }
                 catch
                 {
@@ -89,7 +90,7 @@ namespace MessageGetter
 
                 try
                 {
-                    Repost = Getter.Container.First(t => t.Key.ID == "weibo" + repostID).Key;
+                    Repost = Storage.Container.MessageContainer.First(t => t.Key.ID == "weibo" + repostID).Key;
                 }
                 catch
                 {

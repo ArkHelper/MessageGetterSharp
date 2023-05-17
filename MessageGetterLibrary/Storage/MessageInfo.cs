@@ -11,8 +11,7 @@ namespace MessageGetter
     {
         public MessageInfo() { }
         
-        public CreatedByType MessageCreatedBy { get; set; }
-        public bool Hide { get; set; } = false;
+        public Status MessageStatus { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -21,8 +20,7 @@ namespace MessageGetter
             if (obj.GetType() != typeof(MessageInfo)) return false;
 
             var msgifo = obj as MessageInfo;
-            if (msgifo.MessageCreatedBy != this.MessageCreatedBy) return false;
-            if (msgifo.Hide != this.Hide) return false;
+            if (msgifo.MessageStatus != this.MessageStatus) return false;
 
             return true;
         }

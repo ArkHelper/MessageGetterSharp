@@ -36,14 +36,14 @@ namespace WPFDemo
                     bool @in = true;
 
                     if (message.Text.Contains("微博抽奖平台")) @in = false;
-                    return true;
+                    return @in;
                 })
 
             };
 
             Getter.AddUser(new Weibo("6279793937")); //添加用户
             Getter.NewMessageAdded += Getter_NewMessageAdded; //绑定事件
-            Getter.StartInterval();//启动刷新
+            Getter.Start();//启动刷新
         }
 
         private void Getter_NewMessageAdded(Message message, MessageInfo messageInfo)
@@ -62,9 +62,9 @@ namespace WPFDemo
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    foreach (var item in Getter.Container)
+                    foreach (var item in Container.MessageContainer)
                     {
-                        if (item.Value.Hide || item.Value.MessageCreatedBy == CreatedByType.repost)
+                        if (item.Value.MessageStatus != Status.createdBy_fresh)
                         {
                             continue;
                         }

@@ -30,12 +30,17 @@ namespace MessageGetter
         public static event NewMessageAddedHandler NewMessageAdded;
 
         /// <summary>
+        /// 轮询刷新结束
+        /// </summary>
+        public static event EventHandler<int> PollingFreshEnded;
+
+        /// <summary>
         /// 添加用户
         /// </summary>
         /// <param name="user"></param>
         public static void AddUser(User user)
         {
-            UsersContainer.Add(user, new UserInfo() { UserCreatedBy = CreatedByType.user });
+            UsersContainer.Add(user, new UserInfo() { UserCreatedBy = Status.createdBy_user });
         }
         /// <summary>
         /// 移除用户
@@ -70,7 +75,8 @@ namespace MessageGetter
         /// </summary>
         public static void Start()
         {
-
+            MakeThread();
+            Thread.Start();
         }
 
         /// <summary>
@@ -78,7 +84,7 @@ namespace MessageGetter
         /// </summary>
         public static void Stop()
         {
-
+            Thread.Abort();
         }
 
         /*private static async void ForceFresh()
@@ -93,6 +99,23 @@ namespace MessageGetter
             callback?.Invoke(true);
         }*/
         #endregion
+
+        private static void MakeThread()
+        {
+            Thread = new Thread(async () =>
+            {
+                while (true)
+                {
+                    foreach (var user in UsersContainer.Keys.ToList())
+                    {
+                        await user.UpdateMessage();
+                    }
+                    Thread.Sleep(Configuration.Interval);
+                }
+
+            });
+        }
+        private static Thread Thread;
 
         static Getter()
         {
@@ -115,7 +138,7 @@ namespace MessageGetter
         /// <param name="message">消息</param>
         /// <param name="messageInfo">消息状态</param>
         /// <returns></returns>
-        internal static async Task NewMessageFromFresh(Message message, MessageInfo messageInfo)
+        internal static async Task NewMessage(Message message, MessageInfo messageInfo)
         {
             var operateTargetIfExist = MessageContainer.FirstOrDefault(t => t.Key.ID == message.ID); // 查询消息表中是否有该条消息
 
@@ -123,7 +146,7 @@ namespace MessageGetter
             {
                 MessageContainer[operateTargetIfExist.Key] = messageInfo; // 有就改变它的MessageInfo（有些repost引用时MessageCreatedBy会初始化为repost，如果这条消息又被列表里的用户刷新那么就要改变来源）
             }
-            else //表中没有该消息：
+            else //表中没有该消息
             {
                 initMessage(message);
 
@@ -136,34 +159,38 @@ namespace MessageGetter
                     initMessage(messageToinit.Repost);
                     initMediaList(messageToinit.Medias);
                 }
-                async void initUser(User user)
+                void initUser(User user)
                 {
                     if (!user.ProfileInited)
-                        await user.InitProfile();
+                    {
+                        var _ = user.InitProfile();
+                        _.Wait();
+                    }
+                        
                     if (!UsersContainer.TryGetValue(user, out var userinfo))
                     {
-                        UsersContainer.Add(user, new UserInfo { UserCreatedBy = CreatedByType.repost });
+                        UsersContainer.Add(user, new UserInfo { UserCreatedBy = Status.createdBy_repost });
                     }
                     initMedia(user.Avatar);
                 }
                 void initMediaList(List<Media> medias)
                 {
-                    foreach (Media media in (List<Media>)medias)
-                    {
-                        initMedia(media);
-                    }
+                    medias.ForEach(t=>initMedia(t));
                 }
-                void initMedia(Media media)
+                void initMedia(Media? media)
                 {
+                    if (media == null) return;
                     if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
                         media.Download();
                     if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
                         media.Download();
                 }
 
+                MessageContainer.Add(message, messageInfo);
                 //筛选
                 if (Configuration.Filter == null || Configuration.Filter(message))
                 {
+                    messageInfo.MessageStatus = Status.createdBy_fresh_hide;
                     NewMessageAdded?.Invoke(message, messageInfo);//事件提醒
                 }
             }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MessageGetter.Storage
 {
-    internal static class Container
+    public static class Container
     {
         public static Dictionary<Message, MessageInfo> MessageContainer = new();
         internal static Dictionary<User, UserInfo> UsersContainer = new();

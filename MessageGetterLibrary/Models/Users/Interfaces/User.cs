@@ -56,8 +56,8 @@ namespace MessageGetter
             }
         }
 
-        private Picture avatar;
-        public Picture Avatar
+        private Picture? avatar;
+        public Picture? Avatar
         {
             get { return avatar; }
             set
