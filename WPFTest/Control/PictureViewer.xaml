@@ -5,6 +5,7 @@
     xmlns:CalcBinding="clr-namespace:CalcBinding;assembly=CalcBinding"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WPFDemo.Control"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="rootElement"
     d:DesignHeight="36"
@@ -30,5 +31,17 @@
             IsIndeterminate="True"
             Style="{StaticResource MaterialDesignCircularProgressBar}"
             Value="0" />
+        <materialDesign:PackIcon
+            Name="ExpectionIcon"
+            Width="{CalcBinding:Binding ElementName=PgB,
+                                        Path=Width}"
+            Height="{Binding ElementName=PgB, Path=Height}"
+            MinWidth="25"
+            MinHeight="25"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="#fed52b"
+            Kind="Error"
+            Visibility="Collapsed" />
     </Grid>
 </UserControl>

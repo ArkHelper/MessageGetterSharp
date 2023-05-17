@@ -53,6 +53,7 @@ namespace WPFDemo.Control
             UserAvatar.Children.Add(
                 new PictureViewer(message.User.Avatar)
                 {
+                    IsEnabled = false,
                     Width = 36,
                     Height = 36,
                     Clip = UserAvaClip

@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +42,11 @@ namespace MessageGetter.Medias
             ExpectedLocal = Path.Combine(DirHelper.Media, idForLocal);
             if (File.Exists(ExpectedLocal))
             {
+                if (this is Picture)
+                {
+                    if (!Helper.ImageHelper.CheckImageIntegrity(ExpectedLocal))
+                        File.Delete(ExpectedLocal);
+                }
                 Local = ExpectedLocal;
             }
         }
@@ -53,12 +60,19 @@ namespace MessageGetter.Medias
         /// <returns></returns>
         public async Task Download(bool evenIfExist = false)
         {
-            await base.Download(ExpectedLocal, evenIfExist);
+            base.Download(ExpectedLocal, evenIfExist);
         }
 
         protected virtual Task CreateView()
         {
             throw new NotImplementedException();
+        }
+
+        protected override void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
+        {
+            Debug.WriteLine(this.ID + "=====completed");
+            this.CreateView();
+            base.OnDownloadFileCompleted(sender, e);
         }
     }
 }

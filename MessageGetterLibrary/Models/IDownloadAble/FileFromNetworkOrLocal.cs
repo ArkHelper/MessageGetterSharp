@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Enumeration;
 using System.Linq;
@@ -86,19 +87,23 @@ namespace MessageGetter
         public event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
         public event EventHandler<DownloadProgressChangedEventArgs>? DownloadProgressChanged;
 
-        private void OnDownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
+        protected virtual void OnDownloadProgressChanged(object? sender, DownloadProgressChangedEventArgs e)
         {
             DownloadProgressChanged?.Invoke(this, e);
         }
 
-        private void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
+        protected virtual void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
+            //Debug.WriteLine("base event called" + ":this is " + this.Link);
             if (e.Error == null)
             {
                 Local = ExpectedLocal;
+                DownloadCompleted?.Invoke(this, e);
             }
+            else
+            {
 
-            DownloadCompleted?.Invoke(this, e);
+            }
         }
     }
 }

@@ -78,21 +78,29 @@ namespace WPFDemo.Control
 
         private void InitImage()
         {
-            var userAvatarBitmapImage = RuntimeStorageHelper.PictureStorage.Get(Picture);
-            Image userAvatarImageUI = new Image()
+            try
             {
-                Name = "Image",
-                Height = this.Height,
-                Width = this.Width,
-                VerticalAlignment = VerticalAlignment.Center,
-                /*Tag = user,*/
-                Source = userAvatarBitmapImage,
-                Clip = _clip,
-            };
-            rootGrid.Children.Clear();
-            rootGrid.Children.Add(userAvatarImageUI);
+                var userAvatarBitmapImage = RuntimeStorageHelper.PictureStorage.Get(Picture);
+                Image userAvatarImageUI = new Image()
+                {
+                    Name = "Image",
+                    Height = this.Height,
+                    Width = this.Width,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    /*Tag = user,*/ 
+                    Source = userAvatarBitmapImage,
+                    Clip = _clip,
+                };
+                rootGrid.Children.Clear();
+                rootGrid.Children.Add(userAvatarImageUI);
+            }
+            catch { }
         }
-
+        private void InitExpection()
+        {
+            PgB.Visibility = Visibility.Collapsed;
+            ExpectionIcon.Visibility = Visibility.Visible;
+        }
         private static Image? SearchImageUI(Grid fatherGrid)
         {
             foreach (var item in fatherGrid.Children)
@@ -115,7 +123,7 @@ namespace WPFDemo.Control
                     UseShellExecute = true,
                 });
             }
-            catch { }
+            catch { InitExpection(); }
         }
     }
 }

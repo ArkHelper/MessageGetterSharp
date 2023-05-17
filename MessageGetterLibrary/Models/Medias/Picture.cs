@@ -31,7 +31,7 @@ namespace MessageGetter.Medias
             }
 
             string outid = ID + "_small";
-            string outLocal = DirHelper.Media + "\\" + outid;
+            string outLocal = DirHelper.Media + "\\" + outid + ".jpg";
             this.View = new Picture(outid);
 
             if (View.Local == null)
