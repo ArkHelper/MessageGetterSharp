@@ -184,7 +184,10 @@ namespace MessageGetter
                 {
                     if (media == null) return;
                     if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
+                    {
                         media.Download();
+                        initMedia((media as Video).Cover);
+                    }
                     if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
                         media.Download();
                 }

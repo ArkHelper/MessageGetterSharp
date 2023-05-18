@@ -20,41 +20,17 @@ namespace MessageGetter.Medias
             await base.Download();
         }
 
-        private int ViewSize = 200;
-
-        //public event EventHandler<AsyncCompletedEventArgs>? CreateViewCompleted;
-        protected override async Task CreateView()
+        protected override void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
-            if (View != null && View.Local == null && View.Link != null)
+            try
             {
-                await View.Download();
-                return;
+                Getter.Configuration.ActionAfterPictureDownloaded?.Invoke(this);
             }
-
-            string outid = ID + "_small";
-            string outLocal = DirHelper.Media + "\\" + outid + ".jpg";
-            this.View = new Picture(outid);
-
-            if (View.Local == null)
+            catch
             {
-                using (Bitmap input = new Bitmap(this.Local))
-                using (Bitmap output = new Bitmap(ViewSize, ViewSize))
-                {
-                    int a = input.Width > input.Height ? input.Height : input.Width;
-                    var area = input.Width > input.Height ?
-                        new Rectangle((input.Width - a) / 2, 0, a, a)
-                        : new Rectangle(0, (input.Height - a) / 2, a, a);
-                    using (Graphics g = Graphics.FromImage(output))
-                    {
-                        g.DrawImage(input, new Rectangle(0, 0, ViewSize, ViewSize),
-                                    area,
-                                    GraphicsUnit.Pixel);
-                    };
-                    output.Save(outLocal);
-                    View.Local = outLocal;
-                }
-                GC.Collect();
+
             }
+            base.OnDownloadFileCompleted(sender, e);
         }
     }
 }

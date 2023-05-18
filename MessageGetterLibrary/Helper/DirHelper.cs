@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MessageGetter
 {
-    internal class DirHelper
+    public class DirHelper
     {
         private static string Check(string addr)
         {

@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using MessageGetter.Storage;
+using System.Drawing;
+using System;
 
 namespace WPFDemo
 {
@@ -37,7 +39,12 @@ namespace WPFDemo
 
                     if (message.Text.Contains("微博抽奖平台")) @in = false;
                     return @in;
-                })
+                }),
+
+                /* 图片下载完成后静默执行事件
+                 * MessageGetter图片下载结束后会优先调用该方法，然后调用事件 
+                 * 如果catch到Expection会自动跳过。*/
+                ActionAfterPictureDownloaded = Helper.PictureViewCreator.Create
 
             };
 

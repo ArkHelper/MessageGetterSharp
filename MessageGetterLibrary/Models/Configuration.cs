@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessageGetter.Medias;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace MessageGetter
         private bool _autoDownloadVideo;
         private int _interval;
         private Func<Message, bool>? _filter;
+        private Action<Picture>? _actionAfterPictureDownloaded;
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public Configuration()
@@ -24,6 +26,7 @@ namespace MessageGetter
             _autoDownloadVideo = false;
             _interval = 60000;
             _filter = null;
+            _actionAfterPictureDownloaded = null;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
@@ -67,10 +70,28 @@ namespace MessageGetter
             set { _autoDownloadPicture = value; OnPropertyChanged(); }
         }
 
+        /// <summary>
+        /// 筛选器
+        /// </summary>
         public Func<Message, bool>? Filter
         {
             get { return _filter; }
             set { _filter = value; OnPropertyChanged();}
+        }
+
+        /// <summary>
+        /// 图片下载完成后事件
+        /// </summary>
+        public Action<Picture>? ActionAfterPictureDownloaded
+        {
+            get
+            {
+                return _actionAfterPictureDownloaded;
+            }
+            set
+            {
+                _actionAfterPictureDownloaded= value; OnPropertyChanged();
+            }
         }
     }
 }

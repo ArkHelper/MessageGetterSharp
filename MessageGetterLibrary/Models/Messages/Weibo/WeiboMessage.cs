@@ -137,7 +137,7 @@ namespace MessageGetter
                             if (pagePic.TryGetProperty("url", out var _url))
                             {
                                 string url = _url.GetString();
-                                video.View = new Picture(pagePic.GetProperty("pid").GetString()) { Link = url };
+                                video.Cover = new Picture(pagePic.GetProperty("pid").GetString()) { Link = url };
                             }
                         }
                         if (mediaInfo.TryGetProperty("stream_url_hd", out var streamUrl))

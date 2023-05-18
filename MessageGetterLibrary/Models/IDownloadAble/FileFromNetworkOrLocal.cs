@@ -94,7 +94,6 @@ namespace MessageGetter
 
         protected virtual void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
-            //Debug.WriteLine("base event called" + ":this is " + this.Link);
             if (e.Error == null)
             {
                 Local = ExpectedLocal;

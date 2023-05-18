@@ -80,7 +80,7 @@ namespace WPFDemo.Control
         {
             try
             {
-                var userAvatarBitmapImage = RuntimeStorageHelper.PictureStorage.Get(Picture);
+                var userAvatarBitmapImage = Helper.PictureStorageHelper.Get(Picture);
                 Image userAvatarImageUI = new Image()
                 {
                     Name = "Image",

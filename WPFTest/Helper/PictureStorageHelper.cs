@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace WPFDemo.RuntimeStorageHelper
+namespace WPFDemo.Helper
 {
-    public static class PictureStorage
+    internal static class PictureStorageHelper
     {
         private static List<BitmapImage> _images = new List<BitmapImage>();
         public static BitmapImage Get(Picture picture)

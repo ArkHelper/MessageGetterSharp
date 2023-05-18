@@ -18,8 +18,6 @@ namespace MessageGetter.Medias
             }
         }
 
-        public Picture? View { get; set; }
-
         public object? Tag { get; set; }
 
         public Media(string id)
@@ -40,8 +38,6 @@ namespace MessageGetter.Medias
             }
         }
 
-        //public override event EventHandler<AsyncCompletedEventArgs>? DownloadCompleted;
-
         /// <summary>
         /// 下载该图片
         /// </summary>
@@ -52,15 +48,8 @@ namespace MessageGetter.Medias
             base.Download(ExpectedLocal, evenIfExist);
         }
 
-        protected virtual Task CreateView()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
-            Debug.WriteLine(this.ID + "=====completed");
-            this.CreateView();
             base.OnDownloadFileCompleted(sender, e);
         }
     }
