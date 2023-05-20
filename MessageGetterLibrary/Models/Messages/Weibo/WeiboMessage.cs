@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO.IsolatedStorage;
 using System.Linq;
@@ -72,16 +73,9 @@ namespace MessageGetter
 
             //获取文字并从HTML反转义
             RawText = System.Net.WebUtility.HtmlDecode(Json.GetProperty("text").GetString());
-            Text = RawText;
 
-            //文字处理（html转段落）//future解决误杀正常文字
-            while (Text.Contains('<') && Text.Contains('>'))
-            {
-                Text = Text.Replace("<br />", "\n");
-                int _lef = Text.IndexOf("<");
-                if (_lef != -1)
-                    Text = Text.Remove(_lef, Text.IndexOf(">") - _lef + 1); //换行
-            }
+            //文字处理（html转段落）
+            Text = TextHelper.HTMLToText(RawText);
 
             //转发
             if (Json.TryGetProperty("retweeted_status", out var _ret))
