@@ -10,11 +10,11 @@ namespace WPFDemo.Helper
     {
         public static void Create(Picture picture)
         {
-            int viewSize = 100;
-            string outid = picture.ID + "_small";
+            int viewSize = 200;
+            string outid = "small_" + picture.ID;
             string outLocal = DirHelper.Media + "\\" + outid + ".jpg";
 
-            if (File.Exists(outLocal))
+            if (!File.Exists(outLocal))
             {
                 using (Bitmap input = new Bitmap(picture.Local))
                 using (Bitmap output = new Bitmap(viewSize, viewSize))

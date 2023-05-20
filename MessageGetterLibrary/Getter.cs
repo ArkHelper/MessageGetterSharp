@@ -109,10 +109,11 @@ namespace MessageGetter
                 {
                     foreach (var user in UsersContainer.Keys.ToList())
                     {
-                        await user.UpdateMessage();
+                        if (UsersContainer[user].UserCreatedBy == Status.createdBy_user)
+                            await user.UpdateMessage();
                     }
                     _pollingFreshTimes++;
-                    PollingFreshEnded?.Invoke("MessageGetterSharp",_pollingFreshTimes);
+                    PollingFreshEnded?.Invoke("MessageGetterSharp", _pollingFreshTimes);
                     Thread.Sleep(Configuration.Interval);
                 }
 
@@ -169,7 +170,7 @@ namespace MessageGetter
                         var _ = user.InitProfile();
                         _.Wait();
                     }
-                        
+
                     if (!UsersContainer.TryGetValue(user, out var userinfo))
                     {
                         UsersContainer.Add(user, new UserInfo { UserCreatedBy = Status.createdBy_repost });
@@ -178,14 +179,16 @@ namespace MessageGetter
                 }
                 void initMediaList(List<Media> medias)
                 {
-                    medias.ForEach(t=>initMedia(t));
+                    medias.ForEach(t => initMedia(t));
                 }
                 void initMedia(Media? media)
                 {
                     if (media == null) return;
-                    if (media.GetType() == typeof(Video) && Getter.Configuration.AutoDownloadVideo)
+                    if (media.Local != null) return;
+                    if (media.GetType() == typeof(Video))
                     {
-                        media.Download();
+                        if (Getter.Configuration.AutoDownloadVideo)
+                            media.Download();
                         initMedia((media as Video).Cover);
                     }
                     if (media.GetType() == typeof(Picture) && Getter.Configuration.AutoDownloadPicture)
@@ -196,8 +199,13 @@ namespace MessageGetter
                 //筛选
                 if (Configuration.Filter == null || Configuration.Filter(message))
                 {
-                    messageInfo.MessageStatus = Status.createdBy_fresh_hide;
+                    messageInfo.MessageStatus = Status.createdBy_fresh;
                     NewMessageAdded?.Invoke(message, messageInfo);//事件提醒
+                }
+                else
+                {
+                    messageInfo.MessageStatus = Status.createdBy_fresh_hide;
+
                 }
             }
         }

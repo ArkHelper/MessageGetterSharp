@@ -42,11 +42,24 @@ namespace WPFDemo.Control
         }
         public Picture Picture { get; set; }
 
-        public PictureViewer(Picture picture)
+        private bool _small = true;
+        public bool Small
+        {
+            get { return _small; }
+            set
+            {
+                _small = value;
+            }
+        }
+
+        public string? Link { get; set; } = null;
+
+        public PictureViewer(Picture picture,bool small)
         {
             InitializeComponent();
 
             Picture = picture;
+            Small = small;
 
             if (picture.Local != null)
             {
@@ -80,21 +93,40 @@ namespace WPFDemo.Control
         {
             try
             {
-                var userAvatarBitmapImage = Helper.PictureStorageHelper.Get(Picture);
-                Image userAvatarImageUI = new Image()
+                var bitmapImage = Helper.PictureStorageHelper.Get(Picture.Local, false);
+
+                if (bitmapImage.Width < bitmapImage.Height) _small = true;
+                if (_small)
+                {
+                    bitmapImage = Helper.PictureStorageHelper.Get(Picture.Local, true);
+                }
+
+                Image ImageUI = new Image()
                 {
                     Name = "Image",
-                    Height = this.Height,
-                    Width = this.Width,
                     VerticalAlignment = VerticalAlignment.Center,
-                    /*Tag = user,*/ 
-                    Source = userAvatarBitmapImage,
+                    /*Tag = user,*/
+                    Source = bitmapImage,
                     Clip = _clip,
                 };
+                if (_small)
+                {
+                    this.Width = 100;
+                    this.Height = 100;
+                }
+                else
+                {
+                    this.Width = double.NaN;
+                    this.Height = double.NaN;
+                }
                 rootGrid.Children.Clear();
-                rootGrid.Children.Add(userAvatarImageUI);
+                rootGrid.Children.Add(ImageUI);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                InitExpection();
+                Console.WriteLine(ex.ToString());
+            }
         }
         private void InitExpection()
         {
@@ -119,11 +151,11 @@ namespace WPFDemo.Control
             {
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = Picture.Local,
+                    FileName = (Link != null)?Link:Picture.Local,
                     UseShellExecute = true,
                 });
             }
-            catch { InitExpection(); }
+            catch { }
         }
     }
 }

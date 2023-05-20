@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,11 +40,14 @@ namespace WPFDemo.Control
             BindingMessage = message;
             DataContext = BindingMessage;
 
+            #region 转发
             if (message.Repost != null)
                 this.repostMessageDock.Children.Add(new MessageCardUIContent(message.Repost));
             else
                 this.repostMessageDock.Visibility = Visibility.Collapsed;
+            #endregion
 
+            #region 用户头像
             var UserAvaClip = new RectangleGeometry()
             {
                 RadiusY = 18,
@@ -51,20 +55,31 @@ namespace WPFDemo.Control
                 Rect = new Rect(0, 0, 36, 36)
             };
             UserAvatar.Children.Add(
-                new PictureViewer(message.User.Avatar)
+                new PictureViewer(message.User.Avatar, false)
                 {
                     IsEnabled = false,
                     Width = 36,
                     Height = 36,
                     Clip = UserAvaClip
                 });
-            if (message.Medias.Exists(t=>t is Picture))
-                Picture.Children.Add(
-                    new PictureViewer((Picture)message.Medias[0])
-                    {
-                        Width = 100,
-                        Height = 100
-                    });
+            #endregion
+
+            #region 图片
+            bool small = message.Medias.Count > 1;
+            foreach (var item in message.Medias)
+            {
+                if (item is Video video)
+                {
+                    Picture.Children.Add(new PictureViewer(video.Cover, false) { Link = video.Link});
+                }
+                else
+                {
+                    Picture.Children.Add(
+                        new PictureViewer(item as Picture, small));
+                }
+            }
+            Picture.MaxWidth = (message.Medias.Count <= 3) ? 500 : 320;
+            #endregion
         }
 
         public MessageCardUIContent()

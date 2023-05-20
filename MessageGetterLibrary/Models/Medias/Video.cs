@@ -16,5 +16,18 @@ namespace MessageGetter.Medias
         {
             await base.Download();
         }
+
+        protected override void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+
+            }
+            else
+            {
+                Local = ExpectedLocal;
+                base.OnDownloadFileCompleted(sender, e);
+            }
+        }
     }
 }

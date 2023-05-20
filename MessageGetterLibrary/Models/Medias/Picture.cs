@@ -22,15 +22,23 @@ namespace MessageGetter.Medias
 
         protected override void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
-            try
-            {
-                Getter.Configuration.ActionAfterPictureDownloaded?.Invoke(this);
-            }
-            catch
+            if (e.Error != null)
             {
 
             }
-            base.OnDownloadFileCompleted(sender, e);
+            else
+            {
+                Local = ExpectedLocal;
+                try
+                {
+                    Getter.Configuration.ActionAfterPictureDownloaded?.Invoke(this);
+                }
+                catch (Exception ex)
+                {
+                    //Console.WriteLine(ex.ToString());
+                }
+                base.OnDownloadFileCompleted(sender, e);
+            }
         }
     }
 }

@@ -46,7 +46,16 @@
                 HTML="{Binding RawText}" />
 
             <!--  图片区域  -->
-            <WrapPanel Name="Picture" Margin="0,10,0,0" />
+            <WrapPanel
+                Name="Picture"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Left">
+                <WrapPanel.Resources>
+                    <Style TargetType="Control:PictureViewer">
+                        <Setter Property="Margin" Value="0,0,5,5" />
+                    </Style>
+                </WrapPanel.Resources>
+            </WrapPanel>
 
             <!--  转发消息  -->
             <DockPanel

@@ -41,16 +41,11 @@ namespace MessageGetter.Medias
         /// <summary>
         /// 下载该图片
         /// </summary>
-        /// <param name="evenIfExist">即使本地已经有该ID命名的图片文件</param>
+        /// <param name="evenIfExist">即使本地已经有该ID命名的文件</param>
         /// <returns></returns>
         public async Task Download(bool evenIfExist = false)
         {
             base.Download(ExpectedLocal, evenIfExist);
-        }
-
-        protected override void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
-        {
-            base.OnDownloadFileCompleted(sender, e);
         }
     }
 }

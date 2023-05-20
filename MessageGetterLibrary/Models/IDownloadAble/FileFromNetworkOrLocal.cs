@@ -25,7 +25,7 @@ namespace MessageGetter
             }
             set
             {
-                _expectedLocal= value;
+                _expectedLocal = value;
             }
         }
         public string? Local { get; set; } = null;
@@ -94,15 +94,7 @@ namespace MessageGetter
 
         protected virtual void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
-            if (e.Error == null)
-            {
-                Local = ExpectedLocal;
-                DownloadCompleted?.Invoke(this, e);
-            }
-            else
-            {
-
-            }
+            DownloadCompleted?.Invoke(this, e);
         }
     }
 }
