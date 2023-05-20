@@ -98,6 +98,11 @@ namespace MessageGetter
                 }
             }
 
+            if (Json.TryGetProperty("region_name",out var _region))
+            {
+                Region = _region.GetString();
+            }
+
             //图片/视频获取
             if (Json.TryGetProperty("pics", out var _pics))
             {

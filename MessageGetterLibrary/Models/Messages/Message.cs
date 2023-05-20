@@ -89,6 +89,20 @@ public class Message : IComparable<Message>, INotifyPropertyChanged
             }
         }
     }
+    
+    private string region;
+    public string Region
+    {
+        get { return region; }
+        set
+        {
+            if (region != value)
+            {
+                region = value;
+                OnPropertyChanged(nameof(Region));
+            }
+        }
+    }
 
     private bool inited = false;
     public bool Inited
