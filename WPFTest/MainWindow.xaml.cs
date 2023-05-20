@@ -37,7 +37,7 @@ namespace WPFDemo
                 {
                     bool @in = true;
 
-                    if (message.Text.Contains("微博抽奖平台")) @in = false;
+                    if (message.Text.Contains("对本次抽奖进行监督，结果公正有效。公示链接")) @in = false;
                     return @in;
                 }),
 
