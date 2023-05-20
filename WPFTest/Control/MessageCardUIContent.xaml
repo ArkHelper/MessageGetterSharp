@@ -36,6 +36,11 @@
                         FontSize="12"
                         Foreground="Gray"
                         Text="{Binding CreateAt, Converter={StaticResource DTTFSC}}" />
+                    <Run
+                        d:Text="发布于 黑龙江"
+                        FontSize="12"
+                        Foreground="Gray"
+                        Text="{Binding Region}" />
                 </TextBlock>
             </WrapPanel>
 

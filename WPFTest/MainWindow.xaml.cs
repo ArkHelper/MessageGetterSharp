@@ -49,6 +49,8 @@ namespace WPFDemo
             };
 
             Getter.AddUser(new Weibo("6279793937")); //添加用户
+            Getter.AddUser(new Weibo("6593199887")); //添加用户
+            Getter.AddUser(new Weibo("5698023579")); //添加用户
             Getter.NewMessageAdded += Getter_NewMessageAdded; //绑定事件
             Getter.Start();//启动刷新
         }
