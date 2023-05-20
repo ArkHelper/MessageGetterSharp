@@ -9,5 +9,18 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <materialDesign:Card Name="rootCard" Padding="10,7,10,10" />
+    <materialDesign:Card>
+        <Grid>
+            <Grid Name="rootCard" Margin="20,15,20,20" />
+            <materialDesign:PackIcon
+                Name="TopIcon"
+                Width="20"
+                Height="20"
+                Margin="20"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Kind="FormatVerticalAlignTop"
+                ToolTip="被置顶" />
+        </Grid>
+    </materialDesign:Card>
 </UserControl>

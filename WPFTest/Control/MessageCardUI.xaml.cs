@@ -24,7 +24,16 @@ namespace WPFDemo.Control
         {
             InitializeComponent();
 
-            rootCard.Content = new MessageCardUIContent(message);
+            rootCard.Children.Add(new MessageCardUIContent(message));
+            if (message.IsTop)
+            {
+                TopIcon.Visibility = Visibility.Visible;
+
+            }
+            else
+            {
+                TopIcon.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
